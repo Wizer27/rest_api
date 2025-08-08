@@ -1,0 +1,3 @@
+/Users/ivan/rest_api/build/CMakeFiles/my_api.dir
+/Users/ivan/rest_api/build/CMakeFiles/edit_cache.dir
+/Users/ivan/rest_api/build/CMakeFiles/rebuild_cache.dir
