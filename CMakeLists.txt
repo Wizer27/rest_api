@@ -14,7 +14,7 @@ link_directories(
 
 add_executable(my_api api.cpp)
 
-# ⚠️ Добавляем и event, и event_pthreads
+
 target_link_libraries(my_api
     /Users/ivan/rest_api/pistache/build/src/libpistache.a
     event

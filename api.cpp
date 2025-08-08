@@ -4,6 +4,7 @@
 #include <fstream>
 #include <pistache/endpoint.h>
 #include <pistache/router.h>
+#include <sstream>
 
 
 using namespace Pistache;
@@ -28,6 +29,30 @@ void handlePost(const Rest::Request& request, Http::ResponseWriter response) {
     write_info(body);
     cout << "Data had been writen" << endl;
     response.send(Http::Code::Ok, "Данные получены");
+}
+
+
+string get_file_data(){
+    ifstream file("/Users/ivan/rest_api/data.txt");
+
+    if(!file.is_open()){
+        std::cerr << "File wasnt opened" << endl;
+        return "No data";
+    }
+
+    std::stringstream buffer;
+    buffer << file.rdbuf();  // читаем весь файл в буфер
+
+    file.close();
+    std::string content = buffer.str(); // содержимое файла
+    return content;
+
+}
+
+
+void handleGet(const Request& request, Http::ResponseWriter response){
+    string data = get_file_data();
+    response.send(Http::Code::Ok,data);
 }
 
 
