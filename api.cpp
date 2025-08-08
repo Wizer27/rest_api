@@ -13,6 +13,9 @@ using namespace std;
 
 
 
+
+
+
 void write_info(string data){
     ofstream file("/Users/ivan/rest_api/data.txt",std::ios::app);
     if(!file.is_open()){
