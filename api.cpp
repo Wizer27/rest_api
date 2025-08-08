@@ -63,8 +63,8 @@ int main() {
     Http::Endpoint server(Address("*:8080")); 
     Rest::Router router;
 
-    Routes::Post(router, "/api/data", Routes::bind(handlePost));
-
+    Routes::Post(router, "/api/data", Routes::bind(handlePost));//post
+    Routes::Get(router,"/api/view",Routes::bind(handleGet));//get
     server.init();
     server.setHandler(router.handler());
     server.serve();
