@@ -62,7 +62,6 @@ void handleGet(const Request& request, Http::ResponseWriter response){
 int main() {
     Http::Endpoint server(Address("*:8080")); 
     Rest::Router router;
-
     Routes::Post(router, "/api/data", Routes::bind(handlePost));//post
     Routes::Get(router,"/api/view",Routes::bind(handleGet));//get
     server.init();
