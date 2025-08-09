@@ -16,6 +16,11 @@ def get_request():
 
     try:
         response = r.get(url)
+        try:
+            print("####### STATUS CODE ####### ")
+            print(response.status_code)
+        except Exception as e:
+            print(f"No staus code :{e}")    
         return response.text
     except Exception as e:
         print(f"Error {e}")
