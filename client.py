@@ -1,11 +1,25 @@
-import requests as r;
+import requests as r
+
+def pos_request():
+    url = "http://localhost:8080/api/data"
+    text_data = "Это просто обычный текст без JSON"
+    headers = {"Content-Type": "text/plain"}
+
+    response = r.post(url, data=text_data, headers=headers)
+
+    print("Status code:", response.status_code)
+    print("Response:", response.text)
 
 
-url = "http://localhost:8080/api/data"
-text_data = "Это просто обычный текст без JSON"
-headers = {"Content-Type": "text/plain"}
+def get_request():
+    url = "http://localhost:8080/api/view"
 
-response = r.post(url, data=text_data, headers=headers)
+    try:
+        response = r.get(url)
+        return response.text
+    except Exception as e:
+        print(f"Error {e}")
+        return ""
+    
 
-print("Status code:", response.status_code)
-print("Response:", response.text)
+print(get_request())
