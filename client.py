@@ -25,6 +25,19 @@ def get_request():
     except Exception as e:
         print(f"Error {e}")
         return ""
-    
 
-print(get_request())
+
+def write_user():
+    url  = "http://localhost:8080/api/write";
+    text_data = "ivan 123456";
+    headers = {"Content-Type": "text/plain"}
+    try:
+        response = r.post(url,data = text_data,headers= headers)
+        print(f"Status Code: {response.status_code}")
+        print(f"Text: {response.text}")
+    except Exception as e:
+        print(f"Exception as {e}")
+        return;    
+
+
+print(write_user)

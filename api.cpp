@@ -77,6 +77,9 @@ void register_user(const Rest::Request& request,Http::ResponseWriter response){
     vector<string> data = split(user_data);
     string username = data[0];
     string hash_password = data[1];
+    write_user_to_json(username,hash_password);
+    response.send(Http::Code::Ok,"User had been writen to the database");
+
     // need to load json FIXME 
 
 
@@ -117,6 +120,8 @@ int main() {
     Rest::Router router;
     Routes::Post(router, "/api/data", Routes::bind(handlePost_Ai));//post
     Routes::Get(router,"/api/view",Routes::bind(handleGet));//get
+    Routes::Post(router,"/api/write",Routes::bind(register_user));
+
     server.init();
     server.setHandler(router.handler());
     server.serve();
