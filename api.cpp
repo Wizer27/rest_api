@@ -16,6 +16,27 @@ using namespace std;
 
 
 
+vector<string> split(string word){
+    const long long int space_count = count(word.begin(),word.end(),' ');
+
+    vector<string> res(space_count + 1,"");
+
+    int i = 0;
+    int j = 0;
+    while(i < word.size() && j < res.size()){
+        if(word[i] != ' '){
+            res[j] += word[i];
+            i++;
+        }
+        else{
+            i++;
+            j++;
+        }
+    }
+    return res;
+
+}
+
 void write_info(string data){
     ofstream file("/Users/ivan/rest_api/data.txt",std::ios::app);
     if(!file.is_open()){
@@ -34,6 +55,11 @@ void handlePost_Ai(const Rest::Request& request, Http::ResponseWriter response) 
     response.send(Http::Code::Ok, "Данные получены");
 }
 
+
+void register_user(const Rest::Request& request,Http::ResponseWriter response){
+    string user_data = request.body();
+
+}
 
 
 
