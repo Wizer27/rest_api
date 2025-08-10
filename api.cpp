@@ -5,6 +5,7 @@
 #include <pistache/endpoint.h>
 #include <pistache/router.h>
 #include <sstream>
+#include <nlohmann/json.hpp>
 
 
 using namespace Pistache;
