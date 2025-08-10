@@ -11,6 +11,7 @@
 using namespace Pistache;
 using namespace Pistache::Rest; 
 using namespace std;
+using json = nlohmann::json;
 
 
 
@@ -45,6 +46,20 @@ void write_info(string data){
     }    
     file << data << "\n";
     file.close();
+}
+
+void write_user_to_json(string username,string password){
+    json data;
+
+    data[username] = password;
+    ofstream file("/Users/ivan/rest_api/data/users.json");
+    if(file.is_open()){
+        file << data.dump(4);
+
+    }
+    else{
+        cerr << "Error while writing json" << endl;
+    }
 }
 
 // Обработчик POST-запроса
