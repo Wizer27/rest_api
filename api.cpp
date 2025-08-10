@@ -26,13 +26,16 @@ void write_info(string data){
 }
 
 // Обработчик POST-запроса
-void handlePost(const Rest::Request& request, Http::ResponseWriter response) {
+void handlePost_Ai(const Rest::Request& request, Http::ResponseWriter response) {
     std::string body = request.body();  // Получаем тело запроса
     std::cout << "Получено тело: " << body << std::endl;
     write_info(body);
     cout << "Data had been writen" << endl;
     response.send(Http::Code::Ok, "Данные получены");
 }
+
+
+
 
 
 string get_file_data(){
@@ -65,7 +68,7 @@ void handleGet(const Request& request, Http::ResponseWriter response){
 int main() {
     Http::Endpoint server(Address("*:8080")); 
     Rest::Router router;
-    Routes::Post(router, "/api/data", Routes::bind(handlePost));//post
+    Routes::Post(router, "/api/data", Routes::bind(handlePost_Ai));//post
     Routes::Get(router,"/api/view",Routes::bind(handleGet));//get
     server.init();
     server.setHandler(router.handler());
