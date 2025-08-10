@@ -58,6 +58,11 @@ void handlePost_Ai(const Rest::Request& request, Http::ResponseWriter response) 
 
 void register_user(const Rest::Request& request,Http::ResponseWriter response){
     string user_data = request.body();
+    vector<string> data = split(user_data);
+    string username = data[0];
+    string hash_password = data[1];
+    // need to load json FIXME 
+
 
 }
 
