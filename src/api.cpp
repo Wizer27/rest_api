@@ -145,6 +145,32 @@ void check_user_validation(const Rest::Request& request,Http::ResponseWriter res
     }
 }
 
+void get_user_history(const Rest::Request& request, Http::ResponseWriter response){
+    json data;
+    ifstream file("/Users/ivan/rest_api/data/history.json");
+
+    string username = request.body();
+
+    if(!file.is_open()){
+        std::cerr << "File wasnt opened" << endl;
+        response.send(Http::Code::Bad_Request,"File wasnt opened");
+
+    }
+    else{
+        file >> data;
+
+        try{
+            for(const auto& user:data){
+                if(user["username"] == username){
+                    response.send(Http::Code::Ok,user["username"]);
+                }
+            }
+        }catch(exception& e){
+            response.send(Http::Code::Bad_Request,"User not found");
+        }
+    }
+}
+
 
 void show_user_password(const Rest::Request& request, Http::ResponseWriter response){
     ifstream file("/Users/ivan/rest_api/data/users.json");
@@ -211,6 +237,7 @@ int main() {
     Routes::Post(router,"/api/write",Routes::bind(register_user));
     Routes::Post(router,"/api/getpassword",Routes::bind(show_user_password));
     Routes::Post(router,"/api/validate",Routes::bind(check_user_validation));
+    Routes::Post(router,"/api/history",Routes::bind(get_user_history));
     server.init();
     server.setHandler(router.handler());
     server.serve();
