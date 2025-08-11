@@ -96,10 +96,14 @@ void show_user_password(const Rest::Request& request, Http::ResponseWriter respo
     file >> user_data;
 
     string username = request.body();
-
-    string password = user_data[username];
-
-    response.send(Http::Code::Ok,password);
+    bool is_username = false;
+    try{
+        string password = user_data[username];
+        is_username = true;
+        response.send(Http::Code::Ok,password);
+    }catch(exception& e){
+        response.send(Http::Code::Ok,"No such user");
+    }    
 }
 
 
