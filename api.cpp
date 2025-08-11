@@ -123,7 +123,7 @@ void check_user_validation(const Rest::Request& request,Http::ResponseWriter res
 
         }
         else{
-            response.send(Http::Code::Not_Found,"Username doesnt exists");
+            response.send(Http::Code::Not_Found,"Username doesnt exist");
         }
 
     }
