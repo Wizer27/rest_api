@@ -50,15 +50,21 @@ void write_info(string data){
 
 void write_user_to_json(string username,string password){
     json data;
+    ifstream file("/Users/ivan/rest_api/data/users.json");
+    if(file.is_open()){
+        file >> data;
+        file.close();
+    }
 
     data[username] = password;
-    ofstream file("/Users/ivan/rest_api/data/users.json");
-    if(file.is_open()){
-        file << data.dump(4);
 
+    ofstream out_file("/Users/ivan/rest_api/data/users.json");
+    if(out_file.is_open()){
+        out_file << data.dump(4); 
+        out_file.close();
     }
     else{
-        cerr << "Error while writing json" << endl;
+        std::cerr << "file wasnt opened" << endl;
     }
 }
 

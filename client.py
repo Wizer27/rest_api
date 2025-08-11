@@ -1,4 +1,7 @@
 import requests as r
+import os
+
+
 
 def pos_request():
     url = "http://localhost:8080/api/data"
@@ -29,7 +32,7 @@ def get_request():
 
 def write_user():
     url  = "http://localhost:8080/api/write";
-    text_data = "ivan 123456";
+    text_data = "test_user 123456";
     headers = {"Content-Type": "text/plain"}
     try:
         response = r.post(url,data = text_data,headers= headers)
@@ -51,4 +54,22 @@ def get_username():
     except Exception as e:
         print(f"Exception as e: {e}")    
 
-print(write_user)
+while True:
+    user_search = input(">")
+
+    if user_search == "write data":
+        print(pos_request())
+    if user_search == "get data":
+        print(get_request())
+
+    if user_search == "login":
+        print(write_user())
+
+    if user_search == "get pass":
+        print(get_username())
+
+    if user_search == "exit":
+        break
+
+    if user_search == "clear":
+        os.system("clear")                
