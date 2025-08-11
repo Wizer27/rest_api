@@ -80,7 +80,7 @@ void register_user(const Rest::Request& request,Http::ResponseWriter response){
     write_user_to_json(username,hash_password);
     response.send(Http::Code::Ok,"User had been writen to the database");
 
-    // need to load json FIXME 
+ 
 }
 
 void show_user_password(const Rest::Request& request, Http::ResponseWriter response){
