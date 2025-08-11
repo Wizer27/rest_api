@@ -39,5 +39,16 @@ def write_user():
         print(f"Exception as {e}")
         return;    
 
+def get_username():
+    url  = "http://localhost:8080/api/write";
+    text_data = "ivan";
+    headers = {"Content-Type": "text/plain"}
+
+    try:
+        res = r.post(url,data = text_data,headers= headers)
+        print(f"Status code : {res.status_code}")
+        print(f"Password : {res.text}")
+    except Exception as e:
+        print(f"Exception as e: {e}")    
 
 print(write_user)
