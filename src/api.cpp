@@ -40,7 +40,7 @@ vector<string> split(string word){
 }
 
 void write_info(string data){
-    ofstream file("/Users/ivan/rest_api/data/data.txt",std::ios::app);
+    ofstream file("data/data.txt",std::ios::app);
     if(!file.is_open()){
         std::cout << "File wasnt opened" << endl;
     }    
@@ -50,7 +50,7 @@ void write_info(string data){
 
 void write_user_to_json(string username,string password){
     json data;
-    ifstream file("/Users/ivan/rest_api/data/users.json");
+    ifstream file("data/users.json");
     if(file.is_open()){
         file >> data;
         file.close();
@@ -58,7 +58,7 @@ void write_user_to_json(string username,string password){
 
     data[username] = password;
 
-    ofstream out_file("/Users/ivan/rest_api/data/users.json");
+    ofstream out_file("data/users.json");
     if(out_file.is_open()){
         out_file << data.dump(4); 
         out_file.close();
@@ -84,7 +84,7 @@ void register_user(const Rest::Request& request,Http::ResponseWriter response){
     string username = data[0];
     string hash_password = data[1];
 
-    ifstream file("/Users/ivan/rest_api/data/users.json");
+    ifstream file("data/users.json");
 
     //checking if username is already taken by other user
     json dt;
@@ -110,7 +110,7 @@ void check_user_validation(const Rest::Request& request,Http::ResponseWriter res
     string username = d[0];
     string password = d[1];
 
-    ifstream file("/Users/ivan/rest_api/data/users.json");
+    ifstream file("data/users.json");
 
     if (!file.is_open())
     {
@@ -147,7 +147,7 @@ void check_user_validation(const Rest::Request& request,Http::ResponseWriter res
 
 void get_user_history(const Rest::Request& request, Http::ResponseWriter response){
     json data;
-    ifstream file("/Users/ivan/rest_api/data/history.json");
+    ifstream file("data/history.json");
 
     string username = request.body();
 
@@ -177,7 +177,7 @@ void write_default_history(const Rest::Request& request,Http::ResponseWriter res
 
     json data;
 
-    ifstream file("/Users/ivan/rest_api/data/history.json");
+    ifstream file("data/history.json");
 
     if(file.is_open()){
         file >> data;
@@ -195,7 +195,7 @@ void write_default_history(const Rest::Request& request,Http::ResponseWriter res
     };
 
     data.push_back(new_user);
-    ofstream out_put_file("/Users/ivan/rest_api/data/history.json");
+    ofstream out_put_file("data/history.json");
     if(out_put_file.is_open()){
         out_put_file << data.dump(4);
         out_put_file.close();
@@ -209,7 +209,7 @@ void write_default_history(const Rest::Request& request,Http::ResponseWriter res
 }
 
 void show_user_password(const Rest::Request& request, Http::ResponseWriter response){
-    ifstream file("/Users/ivan/rest_api/data/users.json");
+    ifstream file("data/users.json");
     if(!file.is_open()){
         std::cerr << "Error while opening file" << endl;
         return;
@@ -239,7 +239,7 @@ void show_user_password(const Rest::Request& request, Http::ResponseWriter respo
 
 
 string get_file_data(){
-    ifstream file("/Users/ivan/rest_api/data/data.txt");
+    ifstream file("data/data.txt");
 
     if(!file.is_open()){
         std::cerr << "File wasnt opened" << endl;
