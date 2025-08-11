@@ -40,7 +40,7 @@ vector<string> split(string word){
 }
 
 void write_info(string data){
-    ofstream file("/Users/ivan/rest_api/data.txt",std::ios::app);
+    ofstream file("/Users/ivan/rest_api/data/data.txt",std::ios::app);
     if(!file.is_open()){
         std::cout << "File wasnt opened" << endl;
     }    
@@ -161,7 +161,7 @@ void show_user_password(const Rest::Request& request, Http::ResponseWriter respo
 
 
 string get_file_data(){
-    ifstream file("/Users/ivan/rest_api/data.txt");
+    ifstream file("/Users/ivan/rest_api/data/data.txt");
 
     if(!file.is_open()){
         std::cerr << "File wasnt opened" << endl;
