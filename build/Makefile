@@ -129,29 +129,29 @@ my_api/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/my_api.dir/build.make CMakeFiles/my_api.dir/build
 .PHONY : my_api/fast
 
-api.o: api.cpp.o
-.PHONY : api.o
+src/api.o: src/api.cpp.o
+.PHONY : src/api.o
 
 # target to build an object file
-api.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/my_api.dir/build.make CMakeFiles/my_api.dir/api.cpp.o
-.PHONY : api.cpp.o
+src/api.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/my_api.dir/build.make CMakeFiles/my_api.dir/src/api.cpp.o
+.PHONY : src/api.cpp.o
 
-api.i: api.cpp.i
-.PHONY : api.i
+src/api.i: src/api.cpp.i
+.PHONY : src/api.i
 
 # target to preprocess a source file
-api.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/my_api.dir/build.make CMakeFiles/my_api.dir/api.cpp.i
-.PHONY : api.cpp.i
+src/api.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/my_api.dir/build.make CMakeFiles/my_api.dir/src/api.cpp.i
+.PHONY : src/api.cpp.i
 
-api.s: api.cpp.s
-.PHONY : api.s
+src/api.s: src/api.cpp.s
+.PHONY : src/api.s
 
 # target to generate assembly for a file
-api.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/my_api.dir/build.make CMakeFiles/my_api.dir/api.cpp.s
-.PHONY : api.cpp.s
+src/api.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/my_api.dir/build.make CMakeFiles/my_api.dir/src/api.cpp.s
+.PHONY : src/api.cpp.s
 
 # Help Target
 help:
@@ -162,9 +162,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... my_api"
-	@echo "... api.o"
-	@echo "... api.i"
-	@echo "... api.s"
+	@echo "... src/api.o"
+	@echo "... src/api.i"
+	@echo "... src/api.s"
 .PHONY : help
 
 

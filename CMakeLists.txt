@@ -21,7 +21,7 @@ link_directories(
 )
 
 # Создаем исполнимый файл
-add_executable(my_api api.cpp)
+add_executable(my_api src/api.cpp)
 
 # Линкуем с нужными библиотеками
 target_link_libraries(my_api

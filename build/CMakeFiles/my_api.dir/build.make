@@ -72,28 +72,28 @@ include CMakeFiles/my_api.dir/flags.make
 CMakeFiles/my_api.dir/codegen:
 .PHONY : CMakeFiles/my_api.dir/codegen
 
-CMakeFiles/my_api.dir/api.cpp.o: CMakeFiles/my_api.dir/flags.make
-CMakeFiles/my_api.dir/api.cpp.o: /Users/ivan/rest_api/api.cpp
-CMakeFiles/my_api.dir/api.cpp.o: CMakeFiles/my_api.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/ivan/rest_api/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/my_api.dir/api.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/my_api.dir/api.cpp.o -MF CMakeFiles/my_api.dir/api.cpp.o.d -o CMakeFiles/my_api.dir/api.cpp.o -c /Users/ivan/rest_api/api.cpp
+CMakeFiles/my_api.dir/src/api.cpp.o: CMakeFiles/my_api.dir/flags.make
+CMakeFiles/my_api.dir/src/api.cpp.o: /Users/ivan/rest_api/src/api.cpp
+CMakeFiles/my_api.dir/src/api.cpp.o: CMakeFiles/my_api.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/ivan/rest_api/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/my_api.dir/src/api.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/my_api.dir/src/api.cpp.o -MF CMakeFiles/my_api.dir/src/api.cpp.o.d -o CMakeFiles/my_api.dir/src/api.cpp.o -c /Users/ivan/rest_api/src/api.cpp
 
-CMakeFiles/my_api.dir/api.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/my_api.dir/api.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ivan/rest_api/api.cpp > CMakeFiles/my_api.dir/api.cpp.i
+CMakeFiles/my_api.dir/src/api.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/my_api.dir/src/api.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ivan/rest_api/src/api.cpp > CMakeFiles/my_api.dir/src/api.cpp.i
 
-CMakeFiles/my_api.dir/api.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/my_api.dir/api.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ivan/rest_api/api.cpp -o CMakeFiles/my_api.dir/api.cpp.s
+CMakeFiles/my_api.dir/src/api.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/my_api.dir/src/api.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ivan/rest_api/src/api.cpp -o CMakeFiles/my_api.dir/src/api.cpp.s
 
 # Object files for target my_api
 my_api_OBJECTS = \
-"CMakeFiles/my_api.dir/api.cpp.o"
+"CMakeFiles/my_api.dir/src/api.cpp.o"
 
 # External object files for target my_api
 my_api_EXTERNAL_OBJECTS =
 
-my_api: CMakeFiles/my_api.dir/api.cpp.o
+my_api: CMakeFiles/my_api.dir/src/api.cpp.o
 my_api: CMakeFiles/my_api.dir/build.make
 my_api: /Users/ivan/rest_api/pistache/build/src/libpistache.a
 my_api: CMakeFiles/my_api.dir/link.txt

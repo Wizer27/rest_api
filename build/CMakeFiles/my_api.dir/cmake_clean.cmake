@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/my_api.dir/api.cpp.o"
-  "CMakeFiles/my_api.dir/api.cpp.o.d"
+  "CMakeFiles/my_api.dir/src/api.cpp.o"
+  "CMakeFiles/my_api.dir/src/api.cpp.o.d"
   "my_api"
   "my_api.pdb"
 )
