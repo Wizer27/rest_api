@@ -81,10 +81,26 @@ void register_user(const Rest::Request& request,Http::ResponseWriter response){
     response.send(Http::Code::Ok,"User had been writen to the database");
 
     // need to load json FIXME 
-
-
 }
 
+void show_user_password(const Rest::Request& request, Http::ResponseWriter response){
+    ifstream file("/Users/ivan/rest_api/data/users.json");
+    if(!file.is_open()){
+        std::cerr << "Error while opening file" << endl;
+        return;
+
+    }
+
+    json user_data;
+
+    file >> user_data;
+
+    string username = request.body();
+
+    string password = user_data[username];
+
+    response.send(Http::Code::Ok,password);
+}
 
 
 
@@ -121,7 +137,7 @@ int main() {
     Routes::Post(router, "/api/data", Routes::bind(handlePost_Ai));//post
     Routes::Get(router,"/api/view",Routes::bind(handleGet));//get
     Routes::Post(router,"/api/write",Routes::bind(register_user));
-
+    Routes::Post(router,"/api/getpassword",Routes::bind(show_user_password));
     server.init();
     server.setHandler(router.handler());
     server.serve();
