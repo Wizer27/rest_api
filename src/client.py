@@ -29,6 +29,18 @@ def get_request():
         print(f"Error {e}")
         return ""
 
+def write_default_user_history():
+    url = "http://localhost:8080/api/defhistory";
+    text_data = "ivan";
+    headers = {"Content-Type": "text/plain"}
+
+    try:
+        res = r.post(url,data = text_data,headers=headers)
+        print(f"Status code : {res.status_code}")
+        print(f"Text: {res.text}")
+    except Exception as e:
+        print(f"Exception : {e}")    
+
 
 def write_user():
     url  = "http://localhost:8080/api/write";
@@ -82,9 +94,12 @@ while True:
 
     if user_search == "get pass":
         print(get_username())
+
     if user_search == "val":
         validate_username_post()
 
+    if user_search == "dfh":
+        write_default_user_history()
     if user_search == "exit":
         break
 

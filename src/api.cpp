@@ -172,6 +172,42 @@ void get_user_history(const Rest::Request& request, Http::ResponseWriter respons
 }
 
 
+void write_default_history(const Rest::Request& request,Http::ResponseWriter response){
+    string username = request.body();
+
+    json data;
+
+    ifstream file("/Users/ivan/rest_api/data/history.json");
+
+    if(file.is_open()){
+        file >> data;
+        file.close();
+    }
+    else{
+        std::cerr << "Error while opening 1" << endl;
+        response.send(Http::Code::Bad_Request,"Error while opening 1");
+
+    }
+
+    json new_user = {
+        {"username",username},
+        {"messages",json::array()}
+    };
+
+    data.push_back(new_user);
+    ofstream out_put_file("/Users/ivan/rest_api/data/history.json");
+    if(out_put_file.is_open()){
+        out_put_file << data.dump(4);
+        out_put_file.close();
+        response.send(Http::Code::Ok,"Success");
+    }
+    else{
+        std::cerr << "Error while opening file 2" << endl;
+        response.send(Http::Code::Bad_Request,"Error while opening file 2");
+    }
+
+}
+
 void show_user_password(const Rest::Request& request, Http::ResponseWriter response){
     ifstream file("/Users/ivan/rest_api/data/users.json");
     if(!file.is_open()){
@@ -238,6 +274,7 @@ int main() {
     Routes::Post(router,"/api/getpassword",Routes::bind(show_user_password));
     Routes::Post(router,"/api/validate",Routes::bind(check_user_validation));
     Routes::Post(router,"/api/history",Routes::bind(get_user_history));
+    Routes::Post(router,"/api/defhistory",Routes::bind(write_default_history));
     server.init();
     server.setHandler(router.handler());
     server.serve();
