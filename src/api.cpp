@@ -83,8 +83,24 @@ void register_user(const Rest::Request& request,Http::ResponseWriter response){
     vector<string> data = split(user_data);
     string username = data[0];
     string hash_password = data[1];
-    write_user_to_json(username,hash_password);
-    response.send(Http::Code::Ok,"User had been writen to the database"); 
+
+    ifstream file("/Users/ivan/rest_api/data/users.json");
+
+    //checking if username is already taken by other user
+    json dt;
+    if(file.is_open()){
+        file >> dt;
+    }
+    if(dt.contains(username)){
+        response.send(Http::Code::Bad_Request,"Username is already taken");
+
+    }
+    else{
+        write_user_to_json(username,hash_password);
+        response.send(Http::Code::Ok,"User had been writen to the database"); 
+    }
+
+    
 }
 
 void check_user_validation(const Rest::Request& request,Http::ResponseWriter response){
