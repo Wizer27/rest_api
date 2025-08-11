@@ -43,7 +43,7 @@ def write_user():
         return;    
 
 def get_username():
-    url  = "http://localhost:8080/api/write";
+    url  = "http://localhost:8080/api/getpassword";
     text_data = "ivan";
     headers = {"Content-Type": "text/plain"}
 
