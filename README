@@ -1,0 +1,61 @@
+C++ API for Raspberry Pi
+
+This C++ API has been developed to run on the Raspberry Pi platform using the Pistache library to implement a RESTful web server. It provides basic functionality for user registration, data validation, and storage in a JSON format.
+Description
+
+The API provides several key features:
+
+    User Registration: Users can register by submitting their username and password to the server. The data is stored in a JSON file for further use.
+
+    User Authentication: The API allows for verifying whether the entered password matches the stored one for a specific user.
+
+    Writing Data to File: The API allows for writing data to a text file and provides the option to retrieve this data through a GET request.
+
+    Retrieving User Password: The API allows access to the password of a specific user if it exists in the data.
+
+Technologies Used
+
+    C++: The programming language used to implement the API.
+
+    Pistache: A library for creating REST APIs in C++.
+
+    nlohmann/json: A library for working with JSON in C++.
+
+    Raspberry Pi: The platform used for development and testing of the API.
+
+Functions
+
+    User Registration: This function saves the username and password to a JSON file.
+
+    User Validation: This function checks if a specified user exists and compares the entered password with the stored one.
+
+    Write Data to File: Data received via a POST request is written to a text file.
+
+    Retrieve Data: This function allows retrieving all data stored in the text file through a GET request.
+
+    Retrieve User Password: This function retrieves the password for a specified username from the JSON file.
+
+Example of API Usage
+
+    User Registration:
+    To register a new user, a POST request is made with the user's name and password. This data is stored in the JSON file.
+
+    Authentication:
+    To authenticate a user, a request with the username and password is sent. The API compares the entered password with the one stored in the file.
+
+    Get Data:
+    To retrieve data from the text file, a GET request is made, which returns all the stored data.
+
+Project Structure
+
+The project consists of several main parts:
+
+    Main File (app.cpp): The main file that starts the server and handles requests.
+
+    Data Files (users.json, data.txt): Files used to store user data and other records.
+
+    Dependencies: The Pistache library is used to handle the server, and nlohmann/json is used for JSON handling.
+
+Notes
+
+This API is designed to run on Raspberry Pi and can be used to create a simple server for user registration and authentication, as well as data storage for applications that require user registration and validation.
