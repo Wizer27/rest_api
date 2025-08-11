@@ -102,7 +102,7 @@ void show_user_password(const Rest::Request& request, Http::ResponseWriter respo
         is_username = true;
         response.send(Http::Code::Ok,password);
     }catch(exception& e){
-        response.send(Http::Code::Ok,"No such user");
+        response.send(Http::Code::Ok,e.what());
     }    
 }
 
