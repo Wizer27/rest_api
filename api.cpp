@@ -84,10 +84,51 @@ void register_user(const Rest::Request& request,Http::ResponseWriter response){
     string username = data[0];
     string hash_password = data[1];
     write_user_to_json(username,hash_password);
-    response.send(Http::Code::Ok,"User had been writen to the database");
-
- 
+    response.send(Http::Code::Ok,"User had been writen to the database"); 
 }
+
+void check_user_validation(const Rest::Request& request,Http::ResponseWriter response){
+    string user_data  = request.body();
+    vector<string> d = split(user_data);
+
+    string username = d[0];
+    string password = d[1];
+
+    ifstream file("/Users/ivan/rest_api/data/users.json");
+
+    if (!file.is_open())
+    {
+        std::cerr << "Error opening file" << endl;
+        response.send(Http::Code::Not_Found,"File wasnt opened");
+
+    }
+    else{
+        json data;
+
+        file >> data;
+
+        if(data.contains(username)){
+            try{
+                string true_password = data[username];
+                if(true_password == password){
+                    response.send(Http::Code::Ok,"True");
+                
+                }
+                else{
+                    response.send(Http::Code::Bad_Request,"False");
+                }
+            }catch(exception& e){
+                response.send(Http::Code::Not_Found,e.what());
+            }
+
+        }
+        else{
+            response.send(Http::Code::Not_Found,"Username doesnt exists");
+        }
+
+    }
+}
+
 
 void show_user_password(const Rest::Request& request, Http::ResponseWriter response){
     ifstream file("/Users/ivan/rest_api/data/users.json");
