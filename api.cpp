@@ -194,6 +194,7 @@ int main() {
     Routes::Get(router,"/api/view",Routes::bind(handleGet));//get
     Routes::Post(router,"/api/write",Routes::bind(register_user));
     Routes::Post(router,"/api/getpassword",Routes::bind(show_user_password));
+    Routes::Post(router,"/api/validate",Routes::bind(check_user_validation));
     server.init();
     server.setHandler(router.handler());
     server.serve();
