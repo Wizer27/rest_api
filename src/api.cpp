@@ -205,6 +205,7 @@ void write_data_to_user_history(const Rest::Request& request,Http::ResponseWrite
         }
     }catch(exception& e){
         response.send(Http::Code::Not_Found,e.what());
+        std::cerr << e.what() << endl;
     }
 
     ofstream out_file("/Users/ivan/rest_api/data/history.json");
@@ -325,7 +326,7 @@ int main() {
     Routes::Post(router,"/api/validate",Routes::bind(check_user_validation));
     Routes::Post(router,"/api/history",Routes::bind(get_user_history));
     Routes::Post(router,"/api/defhistory",Routes::bind(write_default_history));
-    Routes::Post(router,"api/wrhistory",Routes::bind(write_data_to_user_history));
+    Routes::Post(router,"/api/wrhistory",Routes::bind(write_data_to_user_history));
     server.init();
     server.setHandler(router.handler());
     server.serve();

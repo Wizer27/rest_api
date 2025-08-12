@@ -80,6 +80,17 @@ def validate_username_post():
         print(f"Exception : {e}")    
 
 
+def write_history_data():
+    url  = "http://localhost:8080/api/wrhistory"
+    text_data = "ivan hellothisisatest"
+    headers = {"Content-Type": "text/plain"}
+    try:
+        res = r.post(url,data = text_data,headers=headers)
+        print(f"Status code: {res.status_code}")
+        print(f"Text: {res.text}")
+    except Exception as e:
+        print(f"Exception : {e}")    
+
 while True:
     user_search = input(">")
 
@@ -100,6 +111,10 @@ while True:
 
     if user_search == "dfh":
         write_default_user_history()
+
+    if user_search == "wrh":
+        write_history_data()
+            
     if user_search == "exit":
         break
 
