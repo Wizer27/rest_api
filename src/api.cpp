@@ -172,6 +172,21 @@ void get_user_history(const Rest::Request& request, Http::ResponseWriter respons
 }
 
 
+void write_data_to_user_history(const Rest::Request& request,Http::ResponseWriter response){
+    json main_data;
+
+    ifstream file("data/history.json");
+
+    if(file.is_open()){
+        file >> main_data;
+        file.close();
+    }
+    else{
+        response.send(Http::Code::Not_Found,"File wasnt opened");
+    }
+    
+}
+
 void write_default_history(const Rest::Request& request,Http::ResponseWriter response){
     string username = request.body();
 
