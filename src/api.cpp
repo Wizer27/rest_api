@@ -350,7 +350,7 @@ void handleGet(const Request& request, Http::ResponseWriter response){
     response.send(Http::Code::Ok,data);
 }
 
-
+//get функция именно для записы default user messages (только сообщения пользователя)
 void write_default_user_messages_history(const::Rest::Request& request,Http::ResponseWriter response) {
     
     auto username_opt = request.query().get("username");
@@ -386,6 +386,44 @@ void write_default_user_messages_history(const::Rest::Request& request,Http::Res
     }
 }
 
+void write_user_message(const Rest::Request& request,Http::ResponseWriter response) {
+    ifstream file("/Users/ivan/rest_api/data/user_messages.json");
+    json data;
+    vector<string> sended_data = split(request.body());
+    string username = sended_data[0];
+    string data_to_write = sended_data[1];
+    if(file.is_open()) {
+        file >> data;
+        file.close();
+    }
+    else {
+        response.send(Http::Code::Bad_Request,"Error while opening");
+        return;
+    }
+    bool user_ex = false;
+    for (auto& user:data) {
+        if (user["username"] == username) {
+            user["messages"].push_back(data_to_write);
+            user_ex = true;
+        }
+    }
+    if (!user_ex) {
+        response.send(Http::Code::Not_Found,"User not found");
+        return;
+    }
+    else{
+        ofstream exit_file("/Users/ivan/rest_api/data/user_messages.json");
+        if (exit_file.is_open()) {
+            exit_file << data.dump(4);
+            exit_file.close();
+            response.send(Http::Code::Ok,"Data loaded");
+        }
+        else {
+            response.send(Http::Code::Bad_Request,"Error while writing data");
+        }
+    }
+}
+
 
 
 int main() {
@@ -399,7 +437,9 @@ int main() {
     Routes::Post(router,"/api/history",Routes::bind(get_user_history));
     Routes::Post(router,"/api/defhistory",Routes::bind(write_default_history));
     Routes::Post(router,"/api/wrhistory",Routes::bind(write_data_to_user_history));
-    Routes::Get(router, "/get_history", Routes::bind(get_user_history_getrequest));
+    Routes::Get(router, "/api/get_history", Routes::bind(get_user_history_getrequest));
+    Routes::Get(router,"/api/def_user_messages",Routes::bind(write_default_user_messages_history));
+    Routes::Post(router,"/api/wrhmessagehistory",Routes::bind(write_user_message));
     server.init();
     server.setHandler(router.handler());
     server.serve();
