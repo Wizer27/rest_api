@@ -55,7 +55,6 @@ void write_user_to_json(string username,string password){
         file >> data;
         file.close();
     }
-
     data[username] = password;
 
     ofstream out_file("/Users/ivan/rest_api/data/users.json");
@@ -145,6 +144,7 @@ void check_user_validation(const Rest::Request& request,Http::ResponseWriter res
     }
 }
 
+//если делать парсинг бд на стороне API ,то это POST запрос
 void get_user_history(const Rest::Request& request, Http::ResponseWriter response){
     json data;
     ifstream file("/Users/ivan/rest_api/data/history.json");
@@ -171,6 +171,43 @@ void get_user_history(const Rest::Request& request, Http::ResponseWriter respons
     }
 }
 
+//get запрос к базе для выдачи истории пользователя
+
+void get_user_history_getrequest(const Rest::Request& request,Http::ResponseWriter response){
+    auto username_opt = request.query().get("username");
+    if(!username_opt.has_value()){
+        response.send(Http::Code::Not_Acceptable,"Empty username");
+        return;
+    }
+    string username = username_opt.value();
+    json main_data;
+
+    ifstream file("/Users/ivan/rest_api/data/history.json");
+    bool found = false;
+    if(!file.is_open()){
+        response.send(Http::Code::Bad_Request,"Database wasnt opened");
+        return;
+    }
+    else{
+        file >> main_data;
+        try{
+            for(const auto& user:main_data){
+                if(user["username"] == username){
+                    response.send(Http::Code::Ok,user["messages"]);
+                    found = true;
+                }
+            }
+            if(!found){
+                response.send(Http::Code::Ok,"User wanst found");
+            }
+
+        }catch(exception& e){
+            response.send(Http::Code::Ok,e.what());
+            return;
+        }
+    }
+
+}
 
 void write_data_to_user_history(const Rest::Request& request,Http::ResponseWriter response){
     json main_data;
@@ -327,6 +364,7 @@ int main() {
     Routes::Post(router,"/api/history",Routes::bind(get_user_history));
     Routes::Post(router,"/api/defhistory",Routes::bind(write_default_history));
     Routes::Post(router,"/api/wrhistory",Routes::bind(write_data_to_user_history));
+    Routes::Get(router, "/get_history", Routes::bind(get_user_history_getrequest));
     server.init();
     server.setHandler(router.handler());
     server.serve();
