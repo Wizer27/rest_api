@@ -296,6 +296,7 @@ void write_default_history(const Rest::Request& request,Http::ResponseWriter res
 
 }
 
+
 void show_user_password(const Rest::Request& request, Http::ResponseWriter response){
     ifstream file("/Users/ivan/rest_api/data/history.json");
     if(!file.is_open()){
@@ -350,6 +351,40 @@ void handleGet(const Request& request, Http::ResponseWriter response){
 }
 
 
+void write_default_user_messages_history(const::Rest::Request& request,Http::ResponseWriter response) {
+    
+    auto username_opt = request.query().get("username");
+    if (!username_opt.has_value()) {
+        response.send(Http::Code::Bad_Request,"Empty username");
+        return;
+    }
+    string username = username_opt.value();
+    ifstream file("/Users/ivan/rest_api/data/user_messages.json");
+    json data;
+    if(file.is_open()) {
+        file >> data;
+        file.close();
+    }
+    else {
+        response.send(Http::Code::Bad_Request,"Error while openeing file1");
+        return;
+    }
+    json new_user = {
+        {"username",username},
+        {"messages",json::array()}
+    };
+    data.push_back(new_user);
+
+    ofstream exit_file("/Users/ivan/rest_api/data/user_messages.json");
+    if (exit_file.is_open()) {
+        exit_file << data.dump(4);
+        exit_file.close();
+        response.send(Http::Code::Ok,"Data loaded");
+    }
+    else {
+        response.send(Http::Code::Bad_Request,"Error while writing exit data tofile2");
+    }
+}
 
 
 
