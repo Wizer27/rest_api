@@ -344,6 +344,34 @@ string get_file_data(){
 
 }
 
+void delete_user_data(const::Rest::Request& request, Http::ResponseWriter response) {
+    string username = request.body();
+    ifstream file("/Users/ivan/rest_api/data/users.json");
+    if (!file.is_open()) {
+        response.send(Http::Code::Bad_Request,"File wasnt opened");
+        return;
+    }
+    json data1;
+    file >> data1;
+    file.close();
+
+    if (data.contains(username)) {
+        data.erase(username);
+        ofstream exit_username_file("/Users/ivan/rest_api/data/users.json");
+        if (exit_username_file.is_open()) {
+            exit_username_file << data.dump(4);
+            exit_username_file.close();
+            response.send(Http::Code::Ok,"User was deleted from users.json");
+        }
+        else {
+            response.send(Http::Code::Bad_Request,"Error while writing changes");
+        }
+    }
+    else {
+        response.send(Http::Code::Not_Found,"User not found");
+    }
+}
+
 
 void handleGet(const Request& request, Http::ResponseWriter response){
     string data = get_file_data();
