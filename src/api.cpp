@@ -434,6 +434,12 @@ void delete_user_data(const::Rest::Request& request, Http::ResponseWriter respon
         response.send(Http::Code::Ok,"Deleted data from history");
 
     }
+    try {
+        delete_from_specail_json("/Users/ivan/rest_api/data/user_messages.json",username);
+        response.send(Http::Code::Ok,"deleted");
+    }catch (exception& e) {
+        response.send(Http::Code::Bad_Request,e.what());
+    }
     
 }
 
@@ -534,6 +540,7 @@ int main() {
     Routes::Get(router, "/api/get_history", Routes::bind(get_user_history_getrequest));
     Routes::Get(router,"/api/def_user_messages",Routes::bind(write_default_user_messages_history));
     Routes::Post(router,"/api/wrhmessagehistory",Routes::bind(write_user_message));
+    Routes::Post(router,"/api/delete_user",Routes::bind(delete_user_data));
     server.init();
     server.setHandler(router.handler());
     server.serve();
