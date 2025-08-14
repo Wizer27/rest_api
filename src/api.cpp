@@ -346,6 +346,7 @@ string get_file_data(){
 
 void delete_user_data(const::Rest::Request& request, Http::ResponseWriter response) {
     string username = request.body();
+    //deleting from reqiester database
     ifstream file("/Users/ivan/rest_api/data/users.json");
     if (!file.is_open()) {
         response.send(Http::Code::Bad_Request,"File wasnt opened");
@@ -370,6 +371,37 @@ void delete_user_data(const::Rest::Request& request, Http::ResponseWriter respon
     else {
         response.send(Http::Code::Not_Found,"User not found");
     }
+
+    //deleting from history
+    ifstream file_history("/Users/ivan/rest_api/data/history.json");
+    if (!file_history.is_open()) {
+        response.send(Http::Code::Bad_Request," History File wasnt opened");
+    }
+    json data_history;
+    file_history >> data_history;
+    file_history.close();
+    for (auto it = data_history.begin(); it != data_history.end(); ) {
+        if ((*it)["username"] == username) {
+            it = data_history.erase(it);
+        }
+        else {
+            ++it;
+        }
+    }
+    ofstream file_exit_history("/Users/ivan/rest_api/data/history.json");
+    if (!file_exit_history.is_open()) {
+        response.send(Http::Code::Bad_Request,"Error while deleting history data");
+        
+    }
+    else {
+        file_exit_history << data_history.dump(4);
+        file_exit_history.close();
+        response.send(Http::Code::Ok,"Deleted data from history");
+
+    }
+
+
+    
 }
 
 
