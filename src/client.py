@@ -89,7 +89,19 @@ def write_history_data():
         print(f"Status code: {res.status_code}")
         print(f"Text: {res.text}")
     except Exception as e:
-        print(f"Exception : {e}")    
+        print(f"Exception : {e}")
+
+def delete_user():
+    url = "http://localhost:8080/api/delete_user";
+    data = "ivan"
+    headers = {"Content-Type": "text/plain"}
+    try:
+        res = r.post(url,data = data,headers=headers)
+        print(f"Status code: {res.status_code}")
+        print(f"Text: {res.text}")
+    except Exception as e:
+        print(f"Exception : {e}")
+
 
 while True:
     user_search = input(">")
@@ -114,9 +126,12 @@ while True:
 
     if user_search == "wrh":
         write_history_data()
-            
+
+    if user_search == "delete user":
+        delete_user()
     if user_search == "exit":
         break
+
 
     if user_search == "clear":
         os.system("clear")                

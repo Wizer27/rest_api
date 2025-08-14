@@ -2,11 +2,5 @@
     {
         "messages": [],
         "username": "test"
-    },
-    {
-        "messages": [
-            "hellothisisatest"
-        ],
-        "username": "ivan"
     }
 ]
