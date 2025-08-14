@@ -356,11 +356,11 @@ void delete_user_data(const::Rest::Request& request, Http::ResponseWriter respon
     file >> data1;
     file.close();
 
-    if (data.contains(username)) {
-        data.erase(username);
+    if (data1.contains(username)) {
+        data1.erase(username);
         ofstream exit_username_file("/Users/ivan/rest_api/data/users.json");
         if (exit_username_file.is_open()) {
-            exit_username_file << data.dump(4);
+            exit_username_file << data1.dump(4);
             exit_username_file.close();
             response.send(Http::Code::Ok,"User was deleted from users.json");
         }
