@@ -344,6 +344,41 @@ string get_file_data(){
 
 }
 
+void delete_from_specail_json(string path,string username) {
+    json data;
+    ifstream file(path);
+    if(!file.is_open()) {
+        std::cerr << "Error while opening file" << endl;
+        
+    }
+    else {
+        file >> data;
+        file.close();
+    }
+    if (!data.contains(username)) {
+        std::cerr << "No such user" << endl;
+        return;
+    }
+    for (auto it = data.begin();it != data.end(); ) {
+        if ((*it)["username"] == username) {
+            it = data.erase(it);
+        }
+        else {
+            ++it;
+        }
+    }
+    ofstream exit(path);
+    if (!exit.is_open()) {
+        std::cerr << "Error while writing result" << endl;
+    }
+    else {
+        exit << data.dump(4);
+        exit.close();
+    }
+    
+}
+
+
 void delete_user_data(const::Rest::Request& request, Http::ResponseWriter response) {
     string username = request.body();
     //deleting from reqiester database
@@ -399,10 +434,9 @@ void delete_user_data(const::Rest::Request& request, Http::ResponseWriter respon
         response.send(Http::Code::Ok,"Deleted data from history");
 
     }
-
-
     
 }
+
 
 
 void handleGet(const Request& request, Http::ResponseWriter response){
