@@ -401,6 +401,20 @@ void delete_from_specail_json(string path,string username) {
 }
 
 
+void loged_in(const Rest::Request& request,Http::ResponseWriter response) {
+    auto username_opt = request.query().get("username");
+    if (!username_opt.has_value()) {
+        response.send(Http::Code::Bad_Request,"Empty username");
+        
+    }
+    json data;
+    ifstream file("/Users/ivan/rest_api/data/loged_in.json");
+    if (!file.is_open()) {
+        response.send(Http::Code::Bad_Request,"Error while opening file");
+    }
+    
+}
+
 
 void delete_user_data(const::Rest::Request& request, Http::ResponseWriter response) {
     string username = request.body();
