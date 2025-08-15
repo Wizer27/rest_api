@@ -399,7 +399,26 @@ void delete_from_specail_json(string path,string username) {
     }
 }
 
+void change_user_state(const Rest::Request& request, Http::ResponseWriter response) {
+    try {
+        
+        string body = request.body();
+        auto data = json::parse(body);
+        string username = data["username"];
+        bool state = data["state"];
+        ifstream file("/Users/ivan/rest_api/data/loged_in.json");
+        if (!file.is_open()) {
+            response.send(Http::Code::Bad_Request,"Error while opening file");
+        }
+        json main_data;
+        file >> main_data;
+        file.close();
 
+        
+    }catch(exception& e) {
+        response.send(Http::Code::Bad_Request,e.what());
+    }
+}
 
 void check_loged_in(const Rest::Request& request,Http::ResponseWriter response) {
     auto username_opt = request.query().get("username");
