@@ -1,6 +1,3 @@
-[
-    {
-        "username":"test",
-        "messages":[]
-    }
-]
+{
+    "ivan": true
+}

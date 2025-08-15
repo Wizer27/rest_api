@@ -397,11 +397,11 @@ void delete_from_specail_json(string path,string username) {
         exit << data.dump(4);
         exit.close();
     }
-    
 }
 
 
-void loged_in(const Rest::Request& request,Http::ResponseWriter response) {
+
+void check_loged_in(const Rest::Request& request,Http::ResponseWriter response) {
     auto username_opt = request.query().get("username");
     if (!username_opt.has_value()) {
         response.send(Http::Code::Bad_Request,"Empty username");
@@ -411,6 +411,21 @@ void loged_in(const Rest::Request& request,Http::ResponseWriter response) {
     ifstream file("/Users/ivan/rest_api/data/loged_in.json");
     if (!file.is_open()) {
         response.send(Http::Code::Bad_Request,"Error while opening file");
+    }
+    else {
+        file >> data;
+        file.close();
+    }
+    string username = username_opt.value();
+    if (data.contains(username)) {
+        try {
+            response.send(Http::Code::Ok,data[username]);
+        }catch (exception& e) {
+            response.send(Http::Code::Bad_Request,e.what());
+        }
+    }
+    else {
+        response.send(Http::Code::Not_Found,"User not found");
     }
     
 }
@@ -583,6 +598,7 @@ int main() {
     Routes::Get(router,"/api/def_user_messages",Routes::bind(write_default_user_messages_history));
     Routes::Post(router,"/api/wrhmessagehistory",Routes::bind(write_user_message));
     Routes::Post(router,"/api/delete_user",Routes::bind(delete_user_data));
+    Routes::Get(router,"/api/check_loged_in",Routes::bind(check_loged_in));
     server.init();
     server.setHandler(router.handler());
     server.serve();
