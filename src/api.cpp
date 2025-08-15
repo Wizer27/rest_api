@@ -401,7 +401,6 @@ void delete_from_specail_json(string path,string username) {
 
 void change_user_state(const Rest::Request& request, Http::ResponseWriter response) {
     try {
-        
         string body = request.body();
         auto data = json::parse(body);
         string username = data["username"];
@@ -413,8 +412,26 @@ void change_user_state(const Rest::Request& request, Http::ResponseWriter respon
         json main_data;
         file >> main_data;
         file.close();
+        if (main_data.contains(username)) {
+            try {
+                main_data[username] = state;
+            }catch(exception& e) {
+                response.send(Http::Code::Bad_Request,e.what());
+            }
+        }
+        else {
+            response.send(Http::Code::Not_Found,"User not found");
+        }
 
-        
+        ofstream exit_file("/Users/ivan/rest_api/data/loged_in.json");
+        if (!exit_file.is_open()) {
+            response.send(Http::Code::Bad_Request,"Error while writing file");
+        }
+        else {
+            exit_file << main_data.dump(4);
+            exit_file.close();
+            response.send(Http::Code::Ok,"Success");
+        }
     }catch(exception& e) {
         response.send(Http::Code::Bad_Request,e.what());
     }
@@ -618,6 +635,7 @@ int main() {
     Routes::Post(router,"/api/wrhmessagehistory",Routes::bind(write_user_message));
     Routes::Post(router,"/api/delete_user",Routes::bind(delete_user_data));
     Routes::Get(router,"/api/check_loged_in",Routes::bind(check_loged_in));
+    Routes::Post(router,"/api/change_state",Routes::bind(change_user_state));
     server.init();
     server.setHandler(router.handler());
     server.serve();
