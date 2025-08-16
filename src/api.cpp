@@ -681,6 +681,7 @@ int main() {
     Routes::Post(router,"/api/delete_user",Routes::bind(delete_user_data));
     Routes::Get(router,"/api/check_loged_in",Routes::bind(check_loged_in));
     Routes::Post(router,"/api/change_state",Routes::bind(change_user_state));
+    Routes::Post(router,"/api/change_password",Routes::bind(change_password));
     server.init();
     server.setHandler(router.handler());
     server.serve();
