@@ -437,6 +437,14 @@ void change_user_state(const Rest::Request& request, Http::ResponseWriter respon
     }
 }
 
+void change_password(const::Rest::Request& request, Http::ResponseWriter response) {
+    try {
+        
+    }catch (exception& e) {
+        response.send(Http::Code::Bad_Request,e.what());
+    }
+}
+
 void check_loged_in(const Rest::Request& request,Http::ResponseWriter response) {
     auto username_opt = request.query().get("username");
     if (!username_opt.has_value()) {
