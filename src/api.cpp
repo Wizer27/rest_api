@@ -439,7 +439,16 @@ void change_user_state(const Rest::Request& request, Http::ResponseWriter respon
 
 void change_password(const::Rest::Request& request, Http::ResponseWriter response) {
     try {
-        
+        string body = request.body();
+        auto main_data = json::parse(body);
+        string username = main_data["username"];
+        string password = main_data["password"];
+        string new_password = main_data["new_password"];
+
+        ifstream file("/Users/ivan/rest_api/data/users.json");
+        if (!file.is_open()) {
+            response.send(Http::Code::Bad_Request,"Error while opening file");
+        }
     }catch (exception& e) {
         response.send(Http::Code::Bad_Request,e.what());
     }
