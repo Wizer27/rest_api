@@ -441,14 +441,42 @@ void change_password(const::Rest::Request& request, Http::ResponseWriter respons
     try {
         string body = request.body();
         auto main_data = json::parse(body);
-        string username = main_data["username"];
-        string password = main_data["password"];
-        string new_password = main_data["new_password"];
+        const string username = main_data["username"];
+        const string password = main_data["password"];
+        const string new_password = main_data["new_password"];
 
         ifstream file("/Users/ivan/rest_api/data/users.json");
         if (!file.is_open()) {
             response.send(Http::Code::Bad_Request,"Error while opening file");
         }
+        json database;
+        file >> database;
+        file.close();
+
+        if (!database.contains(username)) {
+            response.send(Http::Code::Not_Found,"User not found");
+        }
+        try {
+            if (database[username] == password) {
+                database[username] = new_password;
+                ofstream exit("/Users/ivan/rest_api/data/users.json");
+                if (!exit.is_open()) {
+                    response.send(Http::Code::Bad_Request,"Error while writing file");
+                }
+                else {
+                    exit << database.dump(4);
+                    exit.close();
+                    response.send(Http::Code::Ok,"Success");
+                    
+                }
+            }
+            else {
+                response.send(Http::Code::Not_Found,"User password is incorrect");
+            }
+        }catch(exception& e) {
+            response.send(Http::Code::Bad_Request,e.what());
+        }
+
     }catch (exception& e) {
         response.send(Http::Code::Bad_Request,e.what());
     }
