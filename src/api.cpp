@@ -118,6 +118,29 @@ void register_user(const Rest::Request& request,Http::ResponseWriter response){
     }
     else{
         write_user_to_json(username,hash_password);
+        try {
+            ifstream file("/Users/ivan/rest_api/data/user_messages.json");
+            if (!file.is_open()) {
+                response.send(Http::Code::Not_Found,"State wasnt changed");
+            }
+            json state_data;
+            file >> state_data;
+            file.close();
+            state_data[username] = true;
+
+            ofstream exit("/Users/ivan/rest_api/data/user_messages.json");
+            if (!exit.is_open()) {
+                response.send(Http::Code::Bad_Request,"Error while writing");
+            }
+            else {
+                exit << state_data.dump(4);
+                exit.close();
+                response.send(Http::Code::Ok,"Success");
+            }
+            
+        }catch (exception& e) {
+            response.send(Http::Code::Bad_Request,e.what());
+        }
         response.send(Http::Code::Ok,"User had been writen to the database"); 
     }
 
