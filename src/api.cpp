@@ -40,6 +40,39 @@ vector<string> split(string word){
     return res;
 
 }
+
+void safe_logs(string request) {
+    auto now = chrono::system_clock::now();
+    time_t data = chrono::system_clock::to_time_t(now);
+
+    string st_dat = ctime(&data);
+
+    json file_data;
+    bool ok = false;
+    ifstream file("/Users/ivan/rest_api/data/logs.json");
+    if (!file.is_open()) {
+        std::cerr << "Error while opening file" << endl;
+    }
+    else {
+        file >> file_data;
+        file.close();
+        ok = true;
+    }
+    if (ok) {
+        file_data[st_dat] = request;
+        ofstream exit("/Users/ivan/rest_api/data/logs.json");
+        if (!exit.is_open()) {
+            std::cerr << "Error while writing changes" << endl;
+        }
+        else {
+            exit << file_data.dump(4);
+            exit.close();
+            cout << "Success" << endl;
+        }
+    }
+
+}
+
 void write_logs(string log) {
     ifstream file("/Users/ivan/rest_api/data/logs.txt");
     if (!file.is_open()) {
@@ -93,33 +126,20 @@ void write_user_to_json(string username,string password){
 void handlePost_Ai(const Rest::Request& request, Http::ResponseWriter response) {
     std::string body = request.body();  // Получаем тело запроса
     write_logs(body);
+    safe_logs(body);
     std::cout << "Получено тело: " << body << std::endl;
     write_info(body);
     cout << "Data had been writen" << endl;
     response.send(Http::Code::Ok, "Данные получены");
 }
 
-void safe_logs(string request) {
-    auto now = chrono::system_clock::now();
-    time_t data = chrono::system_clock::to_time_t(now);
 
-    string st_dat = ctime(&data);
-
-    json file_data;
-    ifstream file("/Users/ivan/rest_api/data/logs.json");
-    if (!file.is_open()) {
-        std::cerr << "Error while opening file" << endl;
-    }
-    else {
-        file >> file_data;
-        file.close();
-    }
-}
 
 
 void register_user(const Rest::Request& request,Http::ResponseWriter response){
     string user_data = request.body();
     write_logs(user_data);
+    safe_logs(user_data);
     vector<string> data = split(user_data);
     string username = data[0];
     string hash_password = data[1];
@@ -170,6 +190,7 @@ void check_user_validation(const Rest::Request& request,Http::ResponseWriter res
     string user_data  = request.body();
     vector<string> d = split(user_data);
     write_logs(user_data);
+    safe_logs(user_data);
     string username = d[0];
     string password = d[1];
 
@@ -214,6 +235,7 @@ void get_user_history(const Rest::Request& request, Http::ResponseWriter respons
     ifstream file("/Users/ivan/rest_api/data/history.json");
 
     string username = request.body();
+    safe_logs(username);
     write_logs(username);
     if(!file.is_open()){
         std::cerr << "File wasnt opened" << endl;
@@ -246,6 +268,7 @@ void get_user_history_getrequest(const Rest::Request& request,Http::ResponseWrit
     string username = username_opt.value();
     json main_data;
     write_logs(username);
+    safe_logs(username);
     ifstream file("/Users/ivan/rest_api/data/history.json");
     bool found = false;
     if(!file.is_open()){
@@ -281,6 +304,7 @@ void write_data_to_user_history(const Rest::Request& request,Http::ResponseWrite
     string username = send_data[0]; // username
     string messages_to_write = send_data[1]; // user chat hsitory with ai (form fronend)
     write_logs(send_data[1]);
+    safe_logs(request.body());
 
     ifstream file("/Users/ivan/rest_api/data/history.json");
 
@@ -327,6 +351,7 @@ void write_data_to_user_history(const Rest::Request& request,Http::ResponseWrite
 void write_default_history(const Rest::Request& request,Http::ResponseWriter response){
     string username = request.body();
     write_logs(username);
+    safe_logs(request.body());
     json data;
 
     ifstream file("/Users/ivan/rest_api/data/history.json");
@@ -374,6 +399,7 @@ void show_user_password(const Rest::Request& request, Http::ResponseWriter respo
     file >> user_data;
     string username = request.body();
     write_logs(username);
+    safe_logs(request.body());
     if(user_data.contains(username)){
         bool is_username = false;
         try{
@@ -444,6 +470,7 @@ void delete_from_specail_json(string path,string username) {
 void change_user_state(const Rest::Request& request, Http::ResponseWriter response) {
     try {
         string body = request.body();
+        safe_logs(body);
         auto data = json::parse(body);
         string username = data["username"];
         bool state = data["state"];
@@ -482,6 +509,7 @@ void change_user_state(const Rest::Request& request, Http::ResponseWriter respon
 void change_password(const::Rest::Request& request, Http::ResponseWriter response) {
     try {
         string body = request.body();
+        safe_logs(body);
         auto main_data = json::parse(body);
         const string username = main_data["username"];
         const string password = main_data["password"];
@@ -540,6 +568,7 @@ void check_loged_in(const Rest::Request& request,Http::ResponseWriter response) 
         file.close();
     }
     string username = username_opt.value();
+    safe_logs(username);
     if (data.contains(username)) {
         try {
             response.send(Http::Code::Ok,data[username]);
@@ -557,6 +586,7 @@ void check_loged_in(const Rest::Request& request,Http::ResponseWriter response) 
 void delete_user_data(const::Rest::Request& request, Http::ResponseWriter response) {
     string username = request.body();
     write_logs(username);
+    safe_logs(username);
     //deleting from reqiester database
     ifstream file("/Users/ivan/rest_api/data/users.json");
     if (!file.is_open()) {
@@ -566,6 +596,7 @@ void delete_user_data(const::Rest::Request& request, Http::ResponseWriter respon
     json data1;
     file >> data1;
     file.close();
+    
 
     if (data1.contains(username)) {
         data1.erase(username);
@@ -624,6 +655,7 @@ void delete_user_data(const::Rest::Request& request, Http::ResponseWriter respon
 void handleGet(const Request& request, Http::ResponseWriter response){
     string data = get_file_data();
     write_logs(data);
+    safe_logs(data);
     response.send(Http::Code::Ok,data);
 }
 
@@ -636,6 +668,7 @@ void write_default_user_messages_history(const::Rest::Request& request,Http::Res
         return;
     }
     string username = username_opt.value();
+    safe_logs(username);
     ifstream file("/Users/ivan/rest_api/data/user_messages.json");
     json data;
     write_logs(username);
@@ -671,6 +704,7 @@ void write_user_message(const Rest::Request& request,Http::ResponseWriter respon
     string username = sended_data[0];
     string data_to_write = sended_data[1];
     write_logs(username);
+    safe_logs(request.body());
     write_logs(data_to_write);
     if(file.is_open()) {
         file >> data;
