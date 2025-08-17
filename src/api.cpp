@@ -99,6 +99,23 @@ void handlePost_Ai(const Rest::Request& request, Http::ResponseWriter response) 
     response.send(Http::Code::Ok, "Данные получены");
 }
 
+void safe_logs(string request) {
+    auto now = chrono::system_clock::now();
+    time_t data = chrono::system_clock::to_time_t(now);
+
+    string st_dat = ctime(&data);
+
+    json file_data;
+    ifstream file("/Users/ivan/rest_api/data/logs.json");
+    if (!file.is_open()) {
+        std::cerr << "Error while opening file" << endl;
+    }
+    else {
+        file >> file_data;
+        file.close();
+    }
+}
+
 
 void register_user(const Rest::Request& request,Http::ResponseWriter response){
     string user_data = request.body();
