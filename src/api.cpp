@@ -41,16 +41,31 @@ vector<string> split(string word){
 
 }
 
+int index(char letter,string word) {
+    for (int i = 0; i < word.size(); i++) {
+        if (word[i] == letter) {
+            return i;
+        }
+    }
+    return -1;
+}
+
 string encode_Lux_Shif(string sent) {
     string res = "";
     ifstream file("/Users/ivan/rest_api/data/shif.json");
     json data;
+    bool ok = false;
     if (!file.is_open()) {
         cerr << "Error while opening file" << endl;
     }
     else {
         file >> data;
         file.close();
+        ok = true;
+    }
+    if (ok) {
+        string key1 = data["key_encode1"];
+
     }
 }
 
