@@ -65,6 +65,16 @@ string encode_Lux_Shif(string sent) {
     }
     if (ok) {
         string key1 = data["key_encode1"];
+        for (int i = 0;i<sent.size();i++) {
+            int in = index(sent[i],key1);
+            if (in != -1) {
+                res += to_string(in);
+            }
+            else {
+                std::cerr << "No such character" << endl;
+            }
+        }
+        return res;
 
     }
 }
