@@ -41,6 +41,19 @@ vector<string> split(string word){
 
 }
 
+string encode_Lux_Shif(string sent) {
+    string res = "";
+    ifstream file("/Users/ivan/rest_api/data/shif.json");
+    json data;
+    if (!file.is_open()) {
+        cerr << "Error while opening file" << endl;
+    }
+    else {
+        file >> data;
+        file.close();
+    }
+}
+
 void safe_logs(string request) {
     auto now = chrono::system_clock::now();
     time_t data = chrono::system_clock::to_time_t(now);
