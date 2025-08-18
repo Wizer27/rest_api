@@ -103,6 +103,21 @@ def delete_user():
         print(f"Exception : {e}")
 
 
+def post_title():
+    url = "http://localhost:8080/api/title";
+    data = "ivan"
+    headers = {"Content-Type": "text/plain"}
+    try:
+        res = r.post(url,data = data,headers=headers)
+        print(f"Status code: {res.status_code}")
+        print(f"Text: {res.text}")
+    except Exception as e:
+        print(f"Exception : {e}")
+
+
+
+
+
 while True:
     user_search = input(">")
 
@@ -129,6 +144,9 @@ while True:
 
     if user_search == "delete user":
         delete_user()
+
+    if user_search == "title":
+        post_title()    
     if user_search == "exit":
         break
 

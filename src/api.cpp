@@ -78,6 +78,7 @@ string encode_Lux_Shif(string sent) {
         return res;
 
     }
+    return "";
 }
 
 void safe_logs(string request) {
@@ -333,6 +334,65 @@ void get_user_history_getrequest(const Rest::Request& request,Http::ResponseWrit
         }
     }
 
+}
+
+string srez(string word,long long int indx) {
+    long long int size = word.size();
+    if (indx > size) {
+        std::cerr << "Wrong index" << endl;
+    }
+    try {
+        string res = "";
+        for (int i = 0;i <= indx;i++) {
+            res += word[i];
+        }
+        return res;
+    }catch (exception& e) {
+        std::cerr << e.what() << endl;
+        return "";
+    }
+}
+
+string fill(string word) {
+    try{
+        string  res = word;
+        int w = word.size();
+        int r = 15 - w;
+        for(int i = 0;i < r;i++){
+            res += ".";
+        }
+        return res;
+    }catch(exception& e){
+        std::cerr << e.what() << endl;
+        return "";
+    }
+    
+
+    
+}
+
+void gramar_title_gen(const Rest::Request& request,Http::ResponseWriter response) {
+    string title = request.body();
+    if (title == "") {
+        response.send(Http::Code::Bad_Request,"Empty text");
+        std::cerr << "Empty text" << endl;
+    }
+    else {
+        long long int t = title.size();
+        if (t >= 15) {
+            string tit_res = srez(title,15);
+            response.send(Http::Code::Ok,tit_res);
+        }
+        else{
+            try{
+                string r2 = fill(title); // filled with dots or smth
+                response.send(Http::Code::Ok,r2);
+            }catch(exception& e){
+                std::cerr << e.what() << endl;
+            }
+        }
+        
+    }
 }
 
 void write_data_to_user_history(const Rest::Request& request,Http::ResponseWriter response){
@@ -797,6 +857,7 @@ int main() {
     Routes::Get(router,"/api/check_loged_in",Routes::bind(check_loged_in));
     Routes::Post(router,"/api/change_state",Routes::bind(change_user_state));
     Routes::Post(router,"/api/change_password",Routes::bind(change_password));
+    Routes::Post(router,"/api/title",Routes::bind(gramar_title_gen));
     server.init();
     server.setHandler(router.handler());
     server.serve();
