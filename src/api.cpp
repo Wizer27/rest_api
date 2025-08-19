@@ -443,7 +443,39 @@ void write_data_to_user_history(const Rest::Request& request,Http::ResponseWrite
     else{
         response.send(Http::Code::Bad_Request,"Data wasnt writen 2");
     }
+}
 
+
+bool is_username(string username){
+    json data;
+    ifstream file("/Users/ivan/rest_api/data/users.json");
+    if(!file.is_open()){
+        return false;
+    }
+    else{
+        file >> data;
+        file.close();
+    }
+    return data.contains(username);
+}
+
+void write_default_videos(const Rest::Request& request,Http::ResponseWriter response){
+    string username = request.body();
+    if(!is_username(username)){
+        response.send(Http::Code::Not_Found,"User not found");
+    }
+    else{
+        json data;
+        ifstream file("/Users/ivan/rest_api/data/videos.json");
+        if(!file.is_open()){
+            response.send(Http::Code::Bad_Request,"Error while opening file");
+        }
+        else{
+            file >> data;
+            file.close();
+        }
+
+    }
 
 }
 
