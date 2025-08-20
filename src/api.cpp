@@ -461,6 +461,7 @@ bool is_username(string username){
 
 void write_default_videos(const Rest::Request& request,Http::ResponseWriter response){
     string username = request.body();
+     bool ok  = false;
     if(!is_username(username)){
         response.send(Http::Code::Not_Found,"User not found");
     }
@@ -473,6 +474,31 @@ void write_default_videos(const Rest::Request& request,Http::ResponseWriter resp
         else{
             file >> data;
             file.close();
+            ok = true;
+        }
+        if(ok){
+            for(const auto& i:data){
+                if(i["username"] == username){
+                    response.send(Http::Code::Bad_Request,"User already exist");
+                }
+            }
+            json new_user = {
+                {"username",username},
+                {"videos",{}}
+            };
+            data.push_back(new_user);
+            ofstream exit_("/Users/ivan/rest_api/data/videos.json");
+            if(!exit_.is_open()){
+                response.send(Http::Code::Bad_Gateway,"Error while writing");
+            }
+            else{
+                exit_ << data.dump(4);
+                exit_.close();
+                response.send(Http::Code::Ok,"Success");
+            }
+        }
+        else{
+            response.send(Http::Code::Not_Found,"Error");
         }
 
     }
@@ -668,7 +694,7 @@ void change_password(const::Rest::Request& request, Http::ResponseWriter respons
                     exit << database.dump(4);
                     exit.close();
                     response.send(Http::Code::Ok,"Success");
-                    
+
                 }
             }
             else {
