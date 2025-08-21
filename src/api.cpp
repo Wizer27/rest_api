@@ -462,7 +462,8 @@ bool is_username(string username){
 
 void write_default_videos(const Rest::Request& request,Http::ResponseWriter response){
     string username = request.body();
-     bool ok  = false;
+    bool ok  = false;
+    write_logs(username);
     if(!is_username(username)){
         response.send(Http::Code::Not_Found,"User not found");
     }
@@ -503,7 +504,16 @@ void write_default_videos(const Rest::Request& request,Http::ResponseWriter resp
         }
 
     }
+}
 
+
+
+void write_video(const Rest::Request& request, Http::ResponseWriter response){
+
+    string bd = request.body();
+
+    auto data = json::parse(bd);
+    
 }
 
 void write_default_history(const Rest::Request& request,Http::ResponseWriter response){
@@ -917,6 +927,7 @@ int main() {
     Routes::Post(router,"/api/change_state",Routes::bind(change_user_state));
     Routes::Post(router,"/api/change_password",Routes::bind(change_password));
     Routes::Post(router,"/api/title",Routes::bind(gramar_title_gen));
+    Routes::Post(router,"/api/videos_def",Routes::bind(write_default_videos));
     server.init();
     server.setHandler(router.handler());
     server.serve();
