@@ -460,6 +460,20 @@ bool is_username(string username){
     return data.contains(username);
 }
 
+bool is_username_2(string username,string path){
+    json data;
+    ifstream file(path);
+    if(!file.is_open()){
+        return false;
+    }
+    else{
+        file >> data;
+        file.close();
+    }
+    return data.contains(username);
+    
+}
+
 void write_default_videos(const Rest::Request& request,Http::ResponseWriter response){
     string username = request.body();
     bool ok  = false;
@@ -517,7 +531,23 @@ void write_video(const Rest::Request& request, Http::ResponseWriter response){
         string title = data["title"];
         string hash_base64 = data["hash"];
 
-        //FIXME write logic
+        ifstream file("/Users/ivan/rest_api/data/videos.json");
+        if(!file.is_open()){
+            response.send(Http::Code::Not_Found,"Error while opening");
+        }
+        else{
+            json file_data;
+            file >> file_data;
+            file.close();
+            try{
+                for(auto& user : file_data){
+                    
+                }
+
+            }catch(exception& e){
+                response.send(Http::Code::Not_Found,e.what());
+            }
+        }
     }catch(exception& e){
         response.send(Http::Code::Not_Acceptable,"Not json format");
     }
