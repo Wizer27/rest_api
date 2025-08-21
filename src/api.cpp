@@ -474,6 +474,22 @@ bool is_username_2(string username,string path){
     
 }
 
+bool is_username_specail_json(string username,string path){
+    ifstream file(path);
+    json data;
+    if(!file.is_open()){
+        std::cerr<<"Error while opening file" << endl;
+    }
+    else{
+        for(const auto& user:data){
+            if(user["username"] == username){
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
 void write_default_videos(const Rest::Request& request,Http::ResponseWriter response){
     string username = request.body();
     bool ok  = false;
@@ -522,6 +538,7 @@ void write_default_videos(const Rest::Request& request,Http::ResponseWriter resp
 
 
 
+
 void write_video(const Rest::Request& request, Http::ResponseWriter response){
 
     string bd = request.body();
@@ -530,6 +547,7 @@ void write_video(const Rest::Request& request, Http::ResponseWriter response){
         string username = data["username"];
         string title = data["title"];
         string hash_base64 = data["hash"];
+        write_logs(request.body());
 
         ifstream file("/Users/ivan/rest_api/data/videos.json");
         if(!file.is_open()){
@@ -539,9 +557,25 @@ void write_video(const Rest::Request& request, Http::ResponseWriter response){
             json file_data;
             file >> file_data;
             file.close();
+            if(!is_username_specail_json(username,file_data)){
+                response.send(Http::Code::Bad_Request,"User doesnt exist");
+                return;
+
+            }
             try{
                 for(auto& user : file_data){
-                    
+                    if(user["username"] == username){
+                        user["messages"][title] = hash_base64;// messages are like "title":hash
+                    }
+                }
+                ofstream exit("/Users/ivan/rest_api/data/videos.json");
+                if(!exit.is_open()){
+                    response.send(Http::Code::Bad_Request,"error while writing");
+                }
+                else{
+                    exit << file_data.dump(4);
+                    exit.close();
+                    response.send(Http::Code::Ok,"DONE");
                 }
 
             }catch(exception& e){
@@ -968,6 +1002,7 @@ int main() {
     Routes::Post(router,"/api/change_password",Routes::bind(change_password));
     Routes::Post(router,"/api/title",Routes::bind(gramar_title_gen));
     Routes::Post(router,"/api/videos_def",Routes::bind(write_default_videos));
+    Routes::Post(router,"/api.write_video",Routes::bind(write_video));
     server.init();
     server.setHandler(router.handler());
     server.serve();
