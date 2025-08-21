@@ -9,6 +9,7 @@
 #include <ctime>
 #include <chrono>
 #include <queue>
+#include <unordered_map>
 
 
 using namespace Pistache;
@@ -484,7 +485,7 @@ void write_default_videos(const Rest::Request& request,Http::ResponseWriter resp
             }
             json new_user = {
                 {"username",username},
-                {"videos",{}}
+                {"videos",json::object()}
             };
             data.push_back(new_user);
             ofstream exit_("/Users/ivan/rest_api/data/videos.json");
