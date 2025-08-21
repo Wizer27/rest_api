@@ -92,7 +92,7 @@ def write_history_data():
         print(f"Exception : {e}")
 
 def delete_user():
-    url = "http://localhost:8080/api/delete_user";
+    url = "http://localhost:8080/api/delete_user"
     data = "ivan"
     headers = {"Content-Type": "text/plain"}
     try:
@@ -104,7 +104,7 @@ def delete_user():
 
 
 def post_title():
-    url = "http://localhost:8080/api/title";
+    url = "http://localhost:8080/api/title"
     data = "ivan"
     headers = {"Content-Type": "text/plain"}
     try:
