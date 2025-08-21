@@ -511,9 +511,19 @@ void write_default_videos(const Rest::Request& request,Http::ResponseWriter resp
 void write_video(const Rest::Request& request, Http::ResponseWriter response){
 
     string bd = request.body();
+    try{
+        auto data = json::parse(bd);
+        string username = data["username"];
+        string title = data["title"];
+        string hash_base64 = data["hash"];
 
-    auto data = json::parse(bd);
+        //FIXME write logic
+    }catch(exception& e){
+        response.send(Http::Code::Not_Acceptable,"Not json format");
+    }
     
+
+
 }
 
 void write_default_history(const Rest::Request& request,Http::ResponseWriter response){
