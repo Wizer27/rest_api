@@ -2,5 +2,15 @@
     "files.associations": {
         "fstream": "cpp",
         "optional": "cpp"
+    },
+    "editor.tokenColorCustomizations": {
+        "textMateRules": [
+            {
+                "scope": "string",
+                "settings": {
+                    "foreground": "#6285a3"
+                }
+            }
+        ]
     }
 }
