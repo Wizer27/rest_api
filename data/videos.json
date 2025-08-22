@@ -1,6 +1,10 @@
 [
-    {
-        "username":"test",
-        "videos":{}
-    }
+  {
+    "username": "test",
+    "videos": {}
+  },
+  {
+    "username": "ivan",
+    "videos": {}
+  }
 ]
