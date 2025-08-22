@@ -58,9 +58,14 @@ class JsonDataUser(BaseModel):
 async def write_video_to_user(request:JsonDataUser):
     with open("data/videos.json","r") as file:
         data = json.load(file)
-
     for user in data:
         if user["username"]  == request.username:
-            pass    
+            try:
+                user["videos"][request.title] = request.code  
+            except Exception as e:
+                print(f"Expceptin : {e}")    
+    with open("data/videos.json","w") as file:
+        json.dump(data,file,indent=2)
+        print("Success")           
 
 
