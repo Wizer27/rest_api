@@ -5,6 +5,8 @@
   },
   {
     "username": "ivantest",
-    "videos": {}
+    "videos": {
+      "Hello this is a test": "1234567"
+    }
   }
 ]

@@ -57,7 +57,7 @@ class JsonDataUser(BaseModel):
 @app.post("/write/video/user")
 
 async def write_video_to_user(request:JsonDataUser):
-    with open("data/videos.json","r") as file:
+    with open("/Users/ivan/rest_api/data/videos.json","r") as file:
         data = json.load(file)
     for user in data:
         if user["username"]  == request.username:
