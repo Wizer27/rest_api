@@ -21,6 +21,38 @@ def contains_username(username:str) -> bool:
 
     return False        
 
+def has_key(key : str,data) -> bool:
+    if data.get(key):
+        return True
+    return False
+    
+
+def fix_enumaration(username:str,title:str,code:str):
+    with open("/Users/ivan/rest_api/data/videos.json","r") as file:
+        data = json.load(file)
+    ok = False
+    if contains_username(data):
+        for user in data:
+            if has_key(title,user["videos"]):
+                user["videos"][title + "1"] = code
+                ok = True
+            else:
+                print("Key doest exist")
+    else:
+        print("Unvalid username")
+
+    if ok:
+        with open("/Users/ivan/rest_api/data/videos.json","w") as file:
+            json.dump(data,file,indent=2)
+    else:
+        print("Error")                            
+
+
+
+
+
+        
+
 def base_videos_data(username:str) -> bool:
     with open("/Users/ivan/rest_api/data/videos.json","r") as file:
         data = json.load(file)
