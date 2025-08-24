@@ -22,10 +22,7 @@ def contains_username(username:str) -> bool:
     return False        
 
 def has_key(key : str,data) -> bool:
-    if data.get(key):
-        return True
-    return False
-    
+    return key in data
 
 def fix_enumaration(username:str,title:str,code:str):
     with open("/Users/ivan/rest_api/data/videos.json","r") as file:
@@ -47,11 +44,6 @@ def fix_enumaration(username:str,title:str,code:str):
     else:
         print("Error")                            
 
-
-
-
-
-        
 
 def base_videos_data(username:str) -> bool:
     with open("/Users/ivan/rest_api/data/videos.json","r") as file:
