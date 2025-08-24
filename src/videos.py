@@ -11,7 +11,7 @@ def main():
 
 
 def contains_username(username:str) -> bool:
-    with open("data/videos.json","r") as file:
+    with open("/Users/ivan/rest_api/data/videos.json","r") as file:
         data = json.load(file)
 
 
@@ -22,7 +22,7 @@ def contains_username(username:str) -> bool:
     return False        
 
 def base_videos_data(username:str) -> bool:
-    with open("data/videos.json","r") as file:
+    with open("/Users/ivan/rest_api/data/videos.json","r") as file:
         data = json.load(file)
 
     if not contains_username(username):
@@ -30,7 +30,7 @@ def base_videos_data(username:str) -> bool:
             "username":username,
             "videos":{}
         }) 
-        with open("data/videos.json","w") as file:
+        with open("/Users/ivan/rest_api/data/videos.json","w") as file:
             json.dump(data,file,indent=2)
             return True
     else:
@@ -65,7 +65,7 @@ async def write_video_to_user(request:JsonDataUser):
                 user["videos"][request.title] = request.code  
             except Exception as e:
                 print(f"Expceptin : {e}")    
-    with open("data/videos.json","w") as file:
+    with open("/Users/ivan/rest_api/data/videos.json","w") as file:
         json.dump(data,file,indent=2)
         print("Success")           
 
