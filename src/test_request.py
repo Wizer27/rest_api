@@ -16,8 +16,8 @@ def req_2():
     url = "http://0.0.0.0:8000/write/video/user"
     data = {
         "username":"ivantest",
-        "code":"1234567",
-        "title":"Hello this is a test"
+        "code":"123",
+        "title":"First vd"
     }
     resp = r.post(url,json = data)
     print(f"Status code : {resp}")
