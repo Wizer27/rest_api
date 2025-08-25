@@ -99,7 +99,7 @@ class Request_Video_Data(BaseModel):
     title:str
 
 async def get_video(request:Request_Video_Data):
-    with open("/Users/ivan/rest_api/data/videos.json","r") as file;
+    with open("/Users/ivan/rest_api/data/videos.json","r") as file:
         data = json.load(file)
 
     for user in data:
