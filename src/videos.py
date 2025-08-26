@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI,HTTPException
 from pydantic import BaseModel
 import json
 
@@ -60,9 +60,7 @@ def base_videos_data(username:str) -> bool:
     else:
         print("User already exists")
         return False
-        
-def test():
-    pass
+
 
 class Username(BaseModel):
     username :str
@@ -70,7 +68,9 @@ class Username(BaseModel):
 
 @app.post("/load/default/videos")
 async def load_def(request:Username):
-    base_videos_data(request.username)
+    if base_videos_data(request.username):
+        return "OK"
+    raise HTTPException(status_code=404,detail="User already exists")
 
 
 class JsonDataUser(BaseModel):
@@ -97,7 +97,7 @@ class Request_Video_Data(BaseModel):
     username:str
     title:str
 
-    
+
 @app.post("/get/video")
 async def get_video(request:Request_Video_Data):
     with open("/Users/ivan/rest_api/data/videos.json","r") as file:
@@ -109,7 +109,6 @@ async def get_video(request:Request_Video_Data):
                 return user["videos"][request.title]
             else:
                 return "No such title"
-        else:
-            return "No such user"    
+    return "No such user"   
 
 
