@@ -93,11 +93,12 @@ async def write_video_to_user(request:JsonDataUser):
         json.dump(data,file,indent=2)
         print("Success")           
 
-@app.post("/get/video")
 class Request_Video_Data(BaseModel):
     username:str
     title:str
 
+    
+@app.post("/get/video")
 async def get_video(request:Request_Video_Data):
     with open("/Users/ivan/rest_api/data/videos.json","r") as file:
         data = json.load(file)
