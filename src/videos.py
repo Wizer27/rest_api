@@ -115,17 +115,18 @@ async def get_video(request:Request_Video_Data):
 
 
 class LikedPost(BaseModel):
+    username:str
     author:str
     title:str
     post:str
     
-@app.get("/liked/posts")
+@app.post("/liked/posts")
 async def write_liked_post(request:LikedPost):
     with open("/Users/ivan/rest_api/data/liked_posts.json","r") as file:
         data = json.load(file)
     ok = False
     for user in data:
-        if user["username"] == request.author:
+        if user["username"] == request.username:
             user["posts"].append({
                 "author":request.author,
                 "title":request.titile,
@@ -140,21 +141,49 @@ async def write_liked_post(request:LikedPost):
 
 
 class DefRequestLiked(BaseModel):
-    usernmae:str
+    username:str
 
-@app.get("/liked/default")
-def write_def(request:DefRequestLiked):
+@app.post("/liked/default")
+async def write_def(request:DefRequestLiked):
     with open("/Users/ivan/rest_api/data/liked_posts.json","r") as file:
         data = json.load(file)
     for user in data:
-        if user["username"] == request.usernmae:
+        if user["username"] == request.username:
             raise HTTPException(status_code=400,detail="User alredy exists") 
 
     data.append(
         {
-            "username":request.usernmae,
+            "username":request.username,
             "posts":[]
         }
     )
+    with open("/Users/ivan/rest_api/data/liked_posts.json","w") as file:
+        json.dump(data,file,indent=2)
+
+class DeleteRequest(BaseModel):
+    username:str
+    author:str
+    title:str
+    post:str
+
+@app.post("/liked/delete")
+def delte_post_from_liked(request:DeleteRequest):
+    with open("/Users/ivan/rest_api/data/liked_posts.json","r") as file:
+        data = json.load(file)
+    global ok
+    for user in data:
+        if user["username"] == request.username:
+            for post in user["posts"]:
+                if post["title"] == request.title and post["author"] == request.author and post["post"] == request.post:
+                    index = user["posts"].index(post)
+                    user["posts"].pop(index)
+                    ok = True
+    if ok:
+        with open("/Users/ivan/rest_api/data/liked_posts.json","w") as file:
+            json.dump(data,file,indent=2)
+    else:
+        raise HTTPException(status_code=400,detail="User not found")                        
+
+
 
 
