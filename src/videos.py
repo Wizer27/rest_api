@@ -114,3 +114,47 @@ async def get_video(request:Request_Video_Data):
     return "No such user"   
 
 
+class LikedPost(BaseModel):
+    author:str
+    title:str
+    post:str
+    
+@app.get("/liked/posts")
+async def write_liked_post(request:LikedPost):
+    with open("/Users/ivan/rest_api/data/liked_posts.json","r") as file:
+        data = json.load(file)
+    ok = False
+    for user in data:
+        if user["username"] == request.author:
+            user["posts"].append({
+                "author":request.author,
+                "title":request.titile,
+                "post":request.post
+            })   
+            ok = True
+    if ok:
+        with open("/Users/ivan/rest_api/data/liked_posts.json","w") as file:
+            json.dump(data,file,indent=2)
+    else:
+        raise HTTPException(status_code=400,detail="user not found")     
+
+
+class DefRequestLiked(BaseModel):
+    usernmae:str
+
+@app.get("/liked/default")
+def write_def(request:DefRequestLiked):
+    with open("/Users/ivan/rest_api/data/liked_posts.json","r") as file:
+        data = json.load(file)
+    for user in data:
+        if user["username"] == request.usernmae:
+            raise HTTPException(status_code=400,detail="User alredy exists") 
+
+    data.append(
+        {
+            "username":request.usernmae,
+            "posts":[]
+        }
+    )
+
+
