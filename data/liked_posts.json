@@ -11,14 +11,14 @@
     "username": "lux232",
     "posts": [
       {
-        "author": "lux",
-        "title": "test",
-        "post": "dklasjdlkad"
-      },
-      {
         "author": "v",
         "title": "t",
         "post": "g"
+      },
+      {
+        "author": "v",
+        "title": "photo",
+        "post": "f"
       }
     ]
   }
