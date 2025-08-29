@@ -114,6 +114,28 @@ async def get_video(request:Request_Video_Data):
     return "No such user"   
 
 
+class DeleteVideo(BaseModel):
+    username:str
+    title:str
+
+@app.post("/delete/video")
+async def delete_video(request:DeleteVideo):
+    with open("/Users/ivan/rest_api/data/videos.json","r") as file:
+        data = json.load(file)
+    global ex  
+    ex = False
+    for user in data:
+        if user["username"] == request.username:
+            if has_key(request.title,user["videos"]):
+                del user["videos"][request.title]
+                ex = True
+            else:
+                raise HTTPException(status_code=400,detail="Video not found") 
+    if ex:
+        with open("/Users/ivan/rest_api/data/videos.json","w") as file:
+            json.dump(data,file,indent=2)                 
+
+
 class LikedPost(BaseModel):
     username:str
     author:str
@@ -171,6 +193,7 @@ def delte_post_from_liked(request:DeleteRequest):
     with open("/Users/ivan/rest_api/data/liked_posts.json","r") as file:
         data = json.load(file)
     global ok
+    ok = False
     for user in data:
         if user["username"] == request.username:
             for post in user["posts"]:
@@ -184,6 +207,8 @@ def delte_post_from_liked(request:DeleteRequest):
     else:
         raise HTTPException(status_code=400,detail="User not found")                        
 
+class ShowLiked(BaseModel):
+    username:str
 
 
 
