@@ -764,7 +764,7 @@ void change_password(const::Rest::Request& request, Http::ResponseWriter respons
         json database;
         file >> database;
         file.close();
-    
+
         if (!database.contains(username)) {
             response.send(Http::Code::Not_Found,"User not found");
         }

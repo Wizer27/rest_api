@@ -6,5 +6,20 @@
   {
     "username": "f",
     "posts": []
+  },
+  {
+    "username": "lux232",
+    "posts": [
+      {
+        "author": "lux",
+        "title": "test",
+        "post": "dklasjdlkad"
+      },
+      {
+        "author": "v",
+        "title": "t",
+        "post": "g"
+      }
+    ]
   }
 ]

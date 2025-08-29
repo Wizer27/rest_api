@@ -151,7 +151,7 @@ async def write_liked_post(request:LikedPost):
         if user["username"] == request.username:
             user["posts"].append({
                 "author":request.author,
-                "title":request.titile,
+                "title":request.title,
                 "post":request.post
             })   
             ok = True
@@ -209,6 +209,21 @@ def delte_post_from_liked(request:DeleteRequest):
 
 class ShowLiked(BaseModel):
     username:str
-
+@app.post("/get/liked")
+async def get_liked(request:ShowLiked):
+    global j
+    j = False
+    with open("/Users/ivan/rest_api/data/liked_posts.json","r") as file:
+        data = json.load(file)
+    for user in data:
+        if user["username"] == request.username:
+            j = True
+            return user["posts"]
+    if not j:
+        raise HTTPException(status_code=400,detail="User not found")
+    
+        
+            
+        
 
 
