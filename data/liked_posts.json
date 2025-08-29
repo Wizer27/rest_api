@@ -1,6 +1,10 @@
 [
-    {
-        "username":"test",
-        "posts":[]
-    }
+  {
+    "username": "test",
+    "posts": []
+  },
+  {
+    "username": "f",
+    "posts": []
+  }
 ]

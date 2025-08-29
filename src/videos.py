@@ -8,7 +8,7 @@ app = FastAPI()
 
 
 @app.get("/")
-def main():
+async def main():
     return "Alexandria videos API"
 
 
