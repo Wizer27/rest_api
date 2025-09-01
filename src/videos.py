@@ -218,3 +218,17 @@ async def get_liked(request:ShowLiked):
             return user["posts"]
         
     raise HTTPException(status_code=400,detail="User not found")    
+
+class Login(BaseModel):
+    username:str
+    hash_psw:str
+@app.post("/login")
+def login(request:Login):
+    with open("/Users/ivan/rest_api/data/users.json","r") as file:
+        data = json.load(file)
+
+    if not has_key(request.username,data):
+        data[request.username] = request.hash_psw
+        with open("/Users/ivan/rest_api/data/users.json","w") as file:
+            json.dump(data,file,indent=2)
+            
