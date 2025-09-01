@@ -227,7 +227,7 @@ class Register(BaseModel):
     username:str
     hash_psw:str
 @app.post("/login")
-def login(request:Register):
+def register(request:Register):
     with open("/Users/ivan/rest_api/data/users.json","r") as file:
         data = json.load(file)
 
