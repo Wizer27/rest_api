@@ -219,11 +219,15 @@ async def get_liked(request:ShowLiked):
         
     raise HTTPException(status_code=400,detail="User not found")    
 
-class Login(BaseModel):
+
+
+
+
+class Register(BaseModel):
     username:str
     hash_psw:str
 @app.post("/login")
-def login(request:Login):
+def login(request:Register):
     with open("/Users/ivan/rest_api/data/users.json","r") as file:
         data = json.load(file)
 
@@ -231,4 +235,20 @@ def login(request:Login):
         data[request.username] = request.hash_psw
         with open("/Users/ivan/rest_api/data/users.json","w") as file:
             json.dump(data,file,indent=2)
-            
+    else:
+        raise HTTPException(status_code=400,detail="User alredy exist")        
+
+@app.post("/login")
+def login(request:Register):
+    with open("/Users/ivan/rest_api/data/users.json","r") as file:
+        data = json.load(file)
+    if has_key(request.username,data):
+        if data[request.username] == request.hash_psw:
+            return True
+        else:
+            raise HTTPException(status_code=400,detail="Wrong password")    
+    else:
+        raise HTTPException(status_code=404,detail="User not found")    
+
+
+
