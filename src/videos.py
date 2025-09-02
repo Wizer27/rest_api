@@ -322,3 +322,55 @@ def write_post_to_user(request:posts):
     else:
         raise HTTPException(status_code=400,detail="User not found")                
 
+@app.post("/delete/post")
+def delete_post(request:posts):
+    with open("/Users/ivan/rest_api/data/posts.json","r") as file:
+        data = json.load(file)
+
+    base_search = {
+        "author":request.author,
+        "title":request.title,
+        "content":request.content,
+        "type":"text"
+    }    
+    if isinstance(request,VideoPost):
+        base_search["video"] = request.video
+        base_search["type"] = "video"
+    elif isinstance(request,PhotoPost):
+        base_search["photo"] = request.photo
+        base_search["type"] = "photo"
+
+    user_ex = False
+    post_deleted = False
+    for i in data:
+        if i["username"] == request.author:
+            user_ex = True
+    if user_ex:
+        try:
+            main_type = base_search["type"]
+            for user in data:
+                for post in user["posts"]:
+                    if main_type == "text" and base_search["author"] == post["author"] and base_search["title"] == post["title"] and base_search["content"] == post["content"]:
+                        inex = user["posts"].index(post)
+                        user["posts"].pop(inex)
+                        post_deleted = True 
+                        break    
+                    elif main_type == "video" and base_search["author"] == post["author"] and base_search["title"] == post["title"] and base_search["content"] == post["content"] and base_search["video"] == post["video"]:   
+                        inex = user["posts"].index(post)
+                        user["posts"].pop(inex)
+                        post_deleted = True
+                        break    
+                    elif main_type == "photo" and base_search["author"] == post["author"] and base_search["title"] == post["title"] and base_search["content"] == post["content"] and base_search["photo"] == post["photo"]:   
+                        inex = user["posts"].index(post)
+                        user["posts"].pop(inex)
+                        post_deleted = True
+                        break       
+        except Exception as e:
+            raise HTTPException(status_code=404,detail= f"Error : {e}")                         
+    else:
+        raise HTTPException(status_code=400,detail="User not found")                               
+    if post_deleted:
+        with open("/Users/ivan/rest_api/data/posts.json","w") as file:
+            json.dump(data,file)
+    else:
+        raise HTTPException(status_code=400,detail="Something went wrong")        
