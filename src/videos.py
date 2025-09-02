@@ -21,10 +21,26 @@ def contains_username(username:str) -> bool:
         if user["username"] == username:
             return True
 
-    return False        
+    return False   
+   
 
 def has_key(key : str,data) -> bool:
     return key in data
+
+def write_def_postst(username:str) -> bool:
+    with open("/Users/ivan/rest_api/data/posts.json","r") as file:
+        main = json.load(file)
+
+    for user in main:
+        if user["username"] == username:
+            return False
+    main.append({
+        "username":username,
+        "posts":[]
+    }) 
+    with open("/Users/ivan/rest_api/data/posts.json","w") as file:
+        json.dump(main,file,indent=2)
+    return True       
 
 def fix_enumaration(username:str,title:str,code:str):
     with open("/Users/ivan/rest_api/data/videos.json","r") as file:

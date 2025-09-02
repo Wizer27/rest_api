@@ -892,11 +892,19 @@ void delete_user_data(const::Rest::Request& request, Http::ResponseWriter respon
     
 }
 
-void hadle_like(const Request& request,Http::ResponseWriter response){
+void likestosoc(const Request& request,Http::ResponseWriter response){
     bool ok = false;
+    string username;
+    string react;
+    string title;
+    string author;
     try{
         string rbody = request.body();
         auto data = json::parse(rbody);
+        username = data["username"];
+        react = data["reaction"];
+        title = data["title"];
+        author = data["author"];
         ok = true;
     }catch (exception& e){
         response.send(Http::Code::Bad_Request,"Wrong request");
@@ -909,11 +917,18 @@ void hadle_like(const Request& request,Http::ResponseWriter response){
             file >> udp;
             file.close();
             opened = true;
+            
         }
         else{
             response.send(Http::Code::Bad_Request,"File wasnt opened");
         }
-        
+        if(opened){
+            for(const auto& user:udp){
+
+            }
+        }
+
+
     }
 
 
