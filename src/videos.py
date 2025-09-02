@@ -227,7 +227,7 @@ class Register(BaseModel):
     username:str
     hash_psw:str
 @app.post("/login")
-def register(request:Register):
+async def register(request:Register):
     with open("/Users/ivan/rest_api/data/users.json","r") as file:
         data = json.load(file)
 
@@ -239,7 +239,7 @@ def register(request:Register):
         raise HTTPException(status_code=400,detail="User alredy exist")        
 
 @app.post("/login")
-def login(request:Register):
+async def login(request:Register):
     with open("/Users/ivan/rest_api/data/users.json","r") as file:
         data = json.load(file)
     if has_key(request.username,data):

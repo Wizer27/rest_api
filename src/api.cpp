@@ -893,11 +893,27 @@ void delete_user_data(const::Rest::Request& request, Http::ResponseWriter respon
 }
 
 void hadle_like(const Request& request,Http::ResponseWriter response){
+    bool ok = false;
     try{
         string rbody = request.body();
         auto data = json::parse(rbody);
+        ok = true;
     }catch (exception& e){
         response.send(Http::Code::Bad_Request,"Wrong request");
+    }
+    if(ok){
+        ifstream file("/Users/ivan/rest_api/data/likes.json");
+        json udp;
+        bool opened = false;
+        if(file.is_open()){
+            file >> udp;
+            file.close();
+            opened = true;
+        }
+        else{
+            response.send(Http::Code::Bad_Request,"File wasnt opened");
+        }
+        
     }
 
 
