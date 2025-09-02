@@ -290,14 +290,35 @@ class PhotoPost(Post):
     type: Literal["photo"] = "photo"
     photo:str
 
-posts = Union[Post,VideoPost,PhotoPost]
+posts = Union[VideoPost, PhotoPost, Post]
 @app.post("/write/post")
-def write_post_to_user(request:Post):
+def write_post_to_user(request:posts):
     with open("/Users/ivan/rest_api/data/posts.json","r") as file:
         data = json.load(file)
+    
+    base = {
+        "author":request.author,
+        "title":request.title,
+        "content":request.content,
+        "type":"text"
+    }
+    if isinstance(request,VideoPost):
+        base["video"] = request.video
+        base["type"] = "video"
+    elif isinstance(request,PhotoPost):
+        base["photo"] = request.photo
+        base["type"] = "photo"
+
+    user_ex = False
     for user in data:
         if user["username"] == request.author:
-            user["posts"].append({
-                "title":request.title,
-                "content":request.content,
-            })    
+            user_ex = True
+    if user_ex:
+        for user2 in data:
+            if user2["username"] == request.author:
+                user2["posts"].append(base)
+        with open("/Users/ivan/rest_api/data/posts.json","w") as file:
+            json.dump(data,file,indent=2)
+    else:
+        raise HTTPException(status_code=400,detail="User not found")                
+
