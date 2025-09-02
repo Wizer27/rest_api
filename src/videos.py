@@ -266,5 +266,14 @@ async def login(request:Register):
     else:
         raise HTTPException(status_code=404,detail="User not found")    
 
+class Write_Default_Posts(BaseModel):
+    username:str
+
+@app.post("/write_default/posts")
+def write_default_posts(request:Write_Default_Posts):
+    username = request.username
+    if write_def_postst(username):
+        return True
+    raise HTTPException(status_code=400,detail = "Something went wrong")
 
 
