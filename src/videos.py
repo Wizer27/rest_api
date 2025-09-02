@@ -3,6 +3,7 @@ from pydantic import BaseModel
 import json
 import threading
 import socket
+from typing import Union,Literal
 
 app = FastAPI()
 
@@ -276,4 +277,27 @@ def write_default_posts(request:Write_Default_Posts):
         return True
     raise HTTPException(status_code=400,detail = "Something went wrong")
 
+class Post(BaseModel):
+    author:str
+    title:str
+    content:str
 
+class VideoPost(Post):
+    type: Literal["video"] = "video"
+    video:str
+
+class PhotoPost(Post):
+    type: Literal["photo"] = "photo"
+    photo:str
+
+posts = Union[Post,VideoPost,PhotoPost]
+@app.post("/write/post")
+def write_post_to_user(request:Post):
+    with open("/Users/ivan/rest_api/data/posts.json","r") as file:
+        data = json.load(file)
+    for user in data:
+        if user["username"] == request.author:
+            user["posts"].append({
+                "title":request.title,
+                "content":request.content,
+            })    
