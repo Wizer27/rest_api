@@ -892,7 +892,16 @@ void delete_user_data(const::Rest::Request& request, Http::ResponseWriter respon
     
 }
 
+void hadle_like(const Request& request,Http::ResponseWriter response){
+    try{
+        string rbody = request.body();
+        auto data = json::parse(rbody);
+    }catch (exception& e){
+        response.send(Http::Code::Bad_Request,"Wrong request");
+    }
 
+
+}
 
 void handleGet(const Request& request, Http::ResponseWriter response){
     string data = get_file_data();
