@@ -22,8 +22,8 @@ def contains_username(username:str) -> bool:
         if user["username"] == username:
             return True
 
-    return False   
-   
+    return False
+
 
 def has_key(key : str,data) -> bool:
     return key in data
@@ -38,10 +38,11 @@ def write_def_postst(username:str) -> bool:
     main.append({
         "username":username,
         "posts":[]
-    }) 
+    })
     with open("/Users/ivan/rest_api/data/posts.json","w") as file:
         json.dump(main,file,indent=2)
-    return True       
+
+    return True
 
 def fix_enumaration(username:str,title:str,code:str):
     with open("/Users/ivan/rest_api/data/videos.json","r") as file:
@@ -61,7 +62,7 @@ def fix_enumaration(username:str,title:str,code:str):
         with open("/Users/ivan/rest_api/data/videos.json","w") as file:
             json.dump(data,file,indent=2)
     else:
-        print("Error")                            
+        print("Error")
 
 
 def base_videos_data(username:str) -> bool:
@@ -72,7 +73,7 @@ def base_videos_data(username:str) -> bool:
         data.append({
             "username":username,
             "videos":{}
-        }) 
+        })
         with open("/Users/ivan/rest_api/data/videos.json","w") as file:
             json.dump(data,file,indent=2)
             return True
@@ -105,12 +106,12 @@ async def write_video_to_user(request:JsonDataUser):
     for user in data:
         if user["username"]  == request.username:
             try:
-                user["videos"][request.title] = request.code  
+                user["videos"][request.title] = request.code
             except Exception as e:
-                print(f"Expceptin : {e}")    
+                print(f"Expceptin : {e}")
     with open("/Users/ivan/rest_api/data/videos.json","w") as file:
         json.dump(data,file,indent=2)
-        print("Success")           
+        print("Success")
 
 class Request_Video_Data(BaseModel):
     username:str
@@ -128,7 +129,7 @@ async def get_video(request:Request_Video_Data):
                 return user["videos"][request.title]
             else:
                 return "No such title"
-    return "No such user"   
+    return "No such user"
 
 
 class DeleteVideo(BaseModel):
@@ -139,7 +140,7 @@ class DeleteVideo(BaseModel):
 async def delete_video(request:DeleteVideo):
     with open("/Users/ivan/rest_api/data/videos.json","r") as file:
         data = json.load(file)
-    global ex  
+    global ex
     ex = False
     for user in data:
         if user["username"] == request.username:
@@ -147,10 +148,10 @@ async def delete_video(request:DeleteVideo):
                 del user["videos"][request.title]
                 ex = True
             else:
-                raise HTTPException(status_code=400,detail="Video not found") 
+                raise HTTPException(status_code=400,detail="Video not found")
     if ex:
         with open("/Users/ivan/rest_api/data/videos.json","w") as file:
-            json.dump(data,file,indent=2)                 
+            json.dump(data,file,indent=2)
 
 
 class LikedPost(BaseModel):
@@ -158,7 +159,7 @@ class LikedPost(BaseModel):
     author:str
     title:str
     post:str
-    
+
 @app.post("/liked/posts")
 async def write_liked_post(request:LikedPost):
     with open("/Users/ivan/rest_api/data/liked_posts.json","r") as file:
@@ -170,13 +171,13 @@ async def write_liked_post(request:LikedPost):
                 "author":request.author,
                 "title":request.title,
                 "post":request.post
-            })   
+            })
             ok = True
     if ok:
         with open("/Users/ivan/rest_api/data/liked_posts.json","w") as file:
             json.dump(data,file,indent=2)
     else:
-        raise HTTPException(status_code=400,detail="user not found")     
+        raise HTTPException(status_code=400,detail="user not found")
 
 
 class DefRequestLiked(BaseModel):
@@ -188,7 +189,7 @@ async def write_def(request:DefRequestLiked):
         data = json.load(file)
     for user in data:
         if user["username"] == request.username:
-            raise HTTPException(status_code=400,detail="User alredy exists") 
+            raise HTTPException(status_code=400,detail="User alredy exists")
 
     data.append(
         {
@@ -222,19 +223,19 @@ def delte_post_from_liked(request:DeleteRequest):
         with open("/Users/ivan/rest_api/data/liked_posts.json","w") as file:
             json.dump(data,file,indent=2)
     else:
-        raise HTTPException(status_code=400,detail="User not found")                        
+        raise HTTPException(status_code=400,detail="User not found")
 
 class ShowLiked(BaseModel):
     username:str
 @app.post("/get/liked")
 async def get_liked(request:ShowLiked):
     with open("/Users/ivan/rest_api/data/liked_posts.json","r") as file:
-        data = json.load(file) 
+        data = json.load(file)
     for user in data:
         if user["username"] == request.username:
             return user["posts"]
-        
-    raise HTTPException(status_code=400,detail="User not found")    
+
+    raise HTTPException(status_code=400,detail="User not found")
 
 
 
@@ -253,7 +254,7 @@ async def register(request:Register):
         with open("/Users/ivan/rest_api/data/users.json","w") as file:
             json.dump(data,file,indent=2)
     else:
-        raise HTTPException(status_code=400,detail="User alredy exist")        
+        raise HTTPException(status_code=400,detail="User alredy exist")
 
 @app.post("/login")
 async def login(request:Register):
@@ -263,9 +264,9 @@ async def login(request:Register):
         if data[request.username] == request.hash_psw:
             return True
         else:
-            raise HTTPException(status_code=400,detail="Wrong password")    
+            raise HTTPException(status_code=400,detail="Wrong password")
     else:
-        raise HTTPException(status_code=404,detail="User not found")    
+        raise HTTPException(status_code=404,detail="User not found")
 
 class Write_Default_Posts(BaseModel):
     username:str
@@ -295,7 +296,7 @@ posts = Union[VideoPost, PhotoPost, Post]
 def write_post_to_user(request:posts):
     with open("/Users/ivan/rest_api/data/posts.json","r") as file:
         data = json.load(file)
-    
+
     base = {
         "author":request.author,
         "title":request.title,
@@ -319,8 +320,20 @@ def write_post_to_user(request:posts):
                 user2["posts"].append(base)
         with open("/Users/ivan/rest_api/data/posts.json","w") as file:
             json.dump(data,file,indent=2)
+
+        with open("/Users/ivan/rest_api/data/likes.json","r") as file:
+            likes = json.load(file)
+
+        likes.append({
+            "author":request.author,
+            "titile":request.title,
+            "likes":[],
+            "dislikes":[]
+        })
+        with open("/Users/ivan/rest_api/data/likes.json","w") as file:
+            json.dump(likes,file,indent=2)
     else:
-        raise HTTPException(status_code=400,detail="User not found")                
+        raise HTTPException(status_code=400,detail="User not found")
 
 @app.post("/delete/post")
 def delete_post(request:posts):
@@ -332,7 +345,7 @@ def delete_post(request:posts):
         "title":request.title,
         "content":request.content,
         "type":"text"
-    }    
+    }
     if isinstance(request,VideoPost):
         base_search["video"] = request.video
         base_search["type"] = "video"
@@ -353,34 +366,34 @@ def delete_post(request:posts):
                     if main_type == "text" and base_search["author"] == post["author"] and base_search["title"] == post["title"] and base_search["content"] == post["content"]:
                         inex = user["posts"].index(post)
                         user["posts"].pop(inex)
-                        post_deleted = True 
-                        break    
-                    elif main_type == "video" and base_search["author"] == post["author"] and base_search["title"] == post["title"] and base_search["content"] == post["content"] and base_search["video"] == post["video"]:   
+                        post_deleted = True
+                        break
+                    elif main_type == "video" and base_search["author"] == post["author"] and base_search["title"] == post["title"] and base_search["content"] == post["content"] and base_search["video"] == post["video"]:
                         inex = user["posts"].index(post)
                         user["posts"].pop(inex)
                         post_deleted = True
-                        break    
-                    elif main_type == "photo" and base_search["author"] == post["author"] and base_search["title"] == post["title"] and base_search["content"] == post["content"] and base_search["photo"] == post["photo"]:   
+                        break
+                    elif main_type == "photo" and base_search["author"] == post["author"] and base_search["title"] == post["title"] and base_search["content"] == post["content"] and base_search["photo"] == post["photo"]:
                         inex = user["posts"].index(post)
                         user["posts"].pop(inex)
                         post_deleted = True
-                        break       
+                        break
         except Exception as e:
-            raise HTTPException(status_code=404,detail= f"Error : {e}")                         
+            raise HTTPException(status_code=404,detail= f"Error : {e}")
     else:
-        raise HTTPException(status_code=400,detail="User not found")                               
+        raise HTTPException(status_code=400,detail="User not found")
     if post_deleted:
         with open("/Users/ivan/rest_api/data/posts.json","w") as file:
             json.dump(data,file)
     else:
-        raise HTTPException(status_code=400,detail="Something went wrong")        
+        raise HTTPException(status_code=400,detail="Something went wrong")
 
 class SudoLike(BaseModel):
     username:str
     title:str
     author:str
 @app.post("/like/post")
-def like_sudo_post(request:posts):
+def like_sudo_post(request:SudoLike):
     with open("/Users/ivan/rest_api/data/likes.json","r") as file:
         data = json.load(file)
 
@@ -395,5 +408,4 @@ def like_sudo_post(request:posts):
         with open("/Users/ivan/rest_api/data/likes.json","w") as file:
             json.dump(data,file)
     else:
-        raise HTTPException(status_code=400,detail="User not found")                    
-                          
+        raise HTTPException(status_code=400,detail="User not found")
