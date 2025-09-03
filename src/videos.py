@@ -272,7 +272,7 @@ class Write_Default_Posts(BaseModel):
     username:str
 
 @app.post("/write_default/posts")
-def write_default_posts(request:Write_Default_Posts):
+async def write_default_posts(request:Write_Default_Posts):
     username = request.username
     if write_def_postst(username):
         return True
@@ -293,7 +293,7 @@ class PhotoPost(Post):
 
 posts = Union[VideoPost, PhotoPost, Post]
 @app.post("/write/post")
-def write_post_to_user(request:posts):
+async def write_post_to_user(request:posts):
     with open("/Users/ivan/rest_api/data/posts.json","r") as file:
         data = json.load(file)
 
@@ -336,7 +336,7 @@ def write_post_to_user(request:posts):
         raise HTTPException(status_code=400,detail="User not found")
 
 @app.post("/delete/post")
-def delete_post(request:posts):
+async def delete_post(request:posts):
     with open("/Users/ivan/rest_api/data/posts.json","r") as file:
         data = json.load(file)
 
@@ -393,7 +393,7 @@ class SudoLike(BaseModel):
     title:str
     author:str
 @app.post("/like/post")
-def like_sudo_post(request:SudoLike):
+async def like_sudo_post(request:SudoLike):
     with open("/Users/ivan/rest_api/data/likes.json","r") as file:
         data = json.load(file)
 
