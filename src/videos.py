@@ -403,8 +403,15 @@ async def like_sudo_post(request:SudoLike):
             user_ex = True
     if user_ex:
         for user in data:
-            if user["author]"] == request.author:
-                user["like"].append(request.username)
+            if user["author"] == request.author and user["title"] == request.title and request.username not in user["likes"] and request.username not in user["dislikes"]:
+                user["likes"].append(request.username)
+            elif user["author"] == request.author and user["title"] == request.title and request.username not in user["likes"] and request.username in user["dislikes"]:
+                ind = user["dislikes"].index(request.username)
+                user["dislikes"].pop(ind)
+                user["likes"].append(request.username)
+            elif user["author"] == user.author and user["title"] == request.title and request.username in user["likes"] and request.username not in user["dislikes"]:
+                index = user["likes"].index(request.username)
+                user["likes"].pop(index)
         with open("/Users/ivan/rest_api/data/likes.json","w") as file:
             json.dump(data,file)
     else:
@@ -416,3 +423,6 @@ async def dislike_post(request:SudoLike):
         data = json.load(file)
 
     user_ex = False
+    for user in data:
+        if user["author"] == request.author:
+            user_ex = True
