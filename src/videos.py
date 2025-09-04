@@ -1,9 +1,11 @@
-from fastapi import FastAPI,HTTPException
+from fastapi import FastAPI,HTTPException, status
 from pydantic import BaseModel
 import json
 import threading
 import socket
 from typing import Union,Literal
+
+from pydantic.types import StrictStr
 
 
 app = FastAPI()
@@ -431,3 +433,17 @@ async def dislike_post(request:SudoLike):
         for post in data:
             if post["author"] == request.author and post["title"] == request.title and request.username not in post["dislikes"] and request.username not in post["likes"]:
                 post["dislikes"].append(request.username)
+            elif post["author"] == request.author and post["title"] == request.title and request.username not in post["likes"] and request.username in post["dilikes"]:
+                index = post["dislikes"].index(request.username)
+                post["dislikes"].pop(index)
+            elif post["author"] == request.author and post["title"] == request.title and request.username  in post["likes"]  and request.username not in post["dislikes"]:
+                ind = post["likes"].index(request.username)
+                post["likes"].pop(ind)
+                post["dislikes"].append(request.username)
+        with open("/Users/ivan/rest_api/data/likes.json","w") as file:
+            json.dump(data,file)
+    else:
+        raise HTTPException(status_code = 400,detail = "User not found")
+class Nono(BaseModel):
+    username:str
+    creator:str
