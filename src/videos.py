@@ -5,6 +5,7 @@ import threading
 import socket
 from typing import Union,Literal
 
+
 app = FastAPI()
 
 
@@ -426,3 +427,7 @@ async def dislike_post(request:SudoLike):
     for user in data:
         if user["author"] == request.author:
             user_ex = True
+    if user_ex:
+        for post in data:
+            if post["author"] == request.author and post["title"] == request.title and request.username not in post["dislikes"] and request.username not in post["likes"]:
+                post["dislikes"].append(request.username)
