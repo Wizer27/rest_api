@@ -6,6 +6,7 @@ import socket
 from typing import Union,Literal
 
 from pydantic.types import StrictStr
+from pydantic_core.core_schema import str_schema
 
 
 app = FastAPI()
@@ -436,7 +437,7 @@ async def dislike_post(request:SudoLike):
             elif post["author"] == request.author and post["title"] == request.title and request.username not in post["likes"] and request.username in post["dilikes"]:
                 index = post["dislikes"].index(request.username)
                 post["dislikes"].pop(index)
-            elif post["author"] == request.author and post["title"] == request.title and request.username  in post["likes"]  and request.username not in post["dislikes"]:
+            elif post["author"] == request.author and post["title"] == request.title and request.username in post["likes"] and request.username not in post["dislikes"]:
                 ind = post["likes"].index(request.username)
                 post["likes"].pop(ind)
                 post["dislikes"].append(request.username)
@@ -444,6 +445,18 @@ async def dislike_post(request:SudoLike):
             json.dump(data,file)
     else:
         raise HTTPException(status_code = 400,detail = "User not found")
-class Nono(BaseModel):
+class Nano(BaseModel):
     username:str
     creator:str
+
+@app.post("/user/sub")
+async def sub(request:Nano):
+    with open("/Users/ivan/rest_api/data/subs.json","r") as file:
+        data = json.load(file)
+
+    if request.creator in data:
+        data[request.creator].append(request.username)
+    else:
+        raise HTTPException(status_code = 400,detail = "User not found")
+    with open("/Users/ivan/rest_api/data/subs.json","w") as file:
+        json.dump(data,file)
