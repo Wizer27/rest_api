@@ -409,3 +409,10 @@ async def like_sudo_post(request:SudoLike):
             json.dump(data,file)
     else:
         raise HTTPException(status_code=400,detail="User not found")
+
+@app.post("/dislike/post")
+async def dislike_post(request:SudoLike):
+    with open("/Users/ivan/rest_api/data/likes.json","r") as file:
+        data = json.load(file)
+
+    user_ex = False
