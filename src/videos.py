@@ -460,3 +460,17 @@ async def sub(request:Nano):
         raise HTTPException(status_code = 400,detail = "User not found")
     with open("/Users/ivan/rest_api/data/subs.json","w") as file:
         json.dump(data,file)
+
+class GetSubs(BaseModel):
+    username:str
+
+@app.post("/get/subs")
+async def get_subs(request:GetSubs):
+    username = request.username
+    with open("/Users/ivan/rest_api/data/subs.json","r") as file:
+        data = json.load(file)
+
+    if username in data:
+        return data[username]
+    else:
+        raise HTTPException(status_code = 400,detail = "User not found")
