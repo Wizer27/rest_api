@@ -266,12 +266,22 @@ async def register(request:Register):
     with open("/Users/ivan/rest_api/data/users.json","r") as file:
         data = json.load(file)
 
+    with open("/Users/ivan/rest_api/data/subs.json","r") as file:
+        subs = json.load(file)
+
     if not has_key(request.username,data):
         data[request.username] = request.hash_psw
         with open("/Users/ivan/rest_api/data/users.json","w") as file:
             json.dump(data,file,indent=2)
     else:
         raise HTTPException(status_code=400,detail="User alredy exist")
+
+    if request.username in subs:
+        raise HTTPException(status_code = 400,detail = "Eror with the subs")
+    else:
+        subs[request.username] = []
+        with open("/Users/ivan/rest_api/data/subs.json","w") as file:
+            json.dump(subs,file,indent=2)
 
 @app.post("/login")
 async def login(request:Register):
