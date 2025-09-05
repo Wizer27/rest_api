@@ -474,3 +474,18 @@ async def get_subs(request:GetSubs):
         return data[username]
     else:
         raise HTTPException(status_code = 400,detail = "User not found")
+async def unsub(request:Nano):
+    with open("/Users/ivan/rest_api/data/subs.json","r") as file:
+        data =  json.load(file)
+
+    if request.creator in data:
+        if request.username in data[request.creator]:
+            ind = data[request.creator].index(request.username)
+            data[request.creator].pop(ind)
+            with open("/Users/ivan/rest_api/data/subs.json","w") as file:
+                json.dump(data,file)
+                return True
+        else:
+            raise HTTPException(status_code = 400,detail = "You are not subed")
+    else:
+        raise HTTPException(status_code = 400,detail = "User not found")
