@@ -46,6 +46,19 @@ def write_def_postst(username:str) -> bool:
     with open("/Users/ivan/rest_api/data/posts.json","w") as file:
         json.dump(main,file,indent=2)
 
+    with open("/Users/ivan/rest_api/data/subs.json","r") as file:
+        subs = json.load(file)
+
+    if username in subs:
+        return False
+    else:
+        subs[username] = []
+        with open("/Users/ivan/rest_api/data/subs.json","w") as file:
+            json.dump(subs,file,indent=2)
+
+
+
+
     return True
 
 def fix_enumaration(username:str,title:str,code:str):
@@ -248,7 +261,7 @@ async def get_liked(request:ShowLiked):
 class Register(BaseModel):
     username:str
     hash_psw:str
-@app.post("/login")
+@app.post("/register")
 async def register(request:Register):
     with open("/Users/ivan/rest_api/data/users.json","r") as file:
         data = json.load(file)
