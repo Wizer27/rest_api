@@ -18,6 +18,14 @@ def login(username:str,password:str):
     print(f"Status code: {res.status_code}")
     print(f"Text {res.text}")
     print(f" Json: {res.json}")
+def wr_def(username):
+    data = {
+        "username":username,
+    }
+    res = r.post("http://localhost:8000/write_default/posts",json=data)
+    print(f"Status code: {res.status_code}")
+    print(f"Text {res.text}")
+    print(f" Json: {res.json}")
 
 
 while True:
@@ -26,5 +34,7 @@ while True:
         reg("user2","password2")
     elif cons == "login":
         login("user2","password2")
+    elif cons == "wrp":
+        wr_def("test2")
     else:
         print("No succh command")
