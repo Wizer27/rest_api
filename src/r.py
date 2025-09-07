@@ -26,7 +26,15 @@ def wr_def(username):
     print(f"Status code: {res.status_code}")
     print(f"Text {res.text}")
     print(f" Json: {res.json}")
-
+def get_subs_count(username):
+    url = "http://localhost:8000/subs/count"
+    data = {
+        "username":username
+    }
+    resp = r.post(url,json = data)
+    print(f"Status code: {resp.status_code}")
+    print(f"Text {resp.text}")
+    print(f" Json: {resp.json}")
 
 while True:
     cons = input("> ")
@@ -36,5 +44,7 @@ while True:
         login("user2","password2")
     elif cons == "wrp":
         wr_def("test2")
+    elif cons == "sbc":
+        get_subs_count("user2")
     else:
         print("No succh command")
