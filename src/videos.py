@@ -403,6 +403,20 @@ async def delete_post(request:posts):
     else:
         raise HTTPException(status_code=400,detail="Something went wrong")
 
+class GetPosts(BaseModel):
+    username:str
+
+@app.post("/get/user/posts")
+def get_user_posts(request:GetPosts):
+    with open("/Users/ivan/rest_api/data/posts.json","r") as file:
+        data = json.load(file)
+    for user in data:
+        if user["username"] == request.username:
+            return user["posts"]
+    raise HTTPException(status_code=404,detail="User not found")    
+        
+
+
 class SudoLike(BaseModel):
     username:str
     title:str
@@ -507,3 +521,4 @@ async def get_subs_count(request:GetSubs):
     if request.username in data:
         return len(data[request.username])
     raise HTTPException(status_code=404,detail="User not found")
+

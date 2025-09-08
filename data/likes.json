@@ -1,8 +1,14 @@
 [
-    {
-        "author":"test",
-        "title":"test",
-        "likes":[],
-        "dislikes":[]
-    }
+  {
+    "author": "test",
+    "title": "test",
+    "likes": [],
+    "dislikes": []
+  },
+  {
+    "author": "lux23",
+    "titile": "test_api",
+    "likes": [],
+    "dislikes": []
+  }
 ]

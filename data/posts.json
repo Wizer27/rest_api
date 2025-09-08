@@ -26,5 +26,16 @@
   {
     "username": "lux",
     "posts": []
+  },
+  {
+    "username": "lux23",
+    "posts": [
+      {
+        "author": "lux23",
+        "title": "test_api",
+        "content": "test",
+        "type": "text"
+      }
+    ]
   }
 ]

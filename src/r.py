@@ -36,6 +36,15 @@ def get_subs_count(username):
     print(f"Text {resp.text}")
     print(f" Json: {resp.json}")
 
+def get_user_posts(username:str):
+    url = "http://0.0.0.0:8000/get/user/posts"
+    data = {
+        "username":username
+    }
+    resp = r.post(url,json = data)
+    print(f"RESULT: {resp.text}")
+    return resp.text
+
 while True:
     cons = input("> ")
     if cons == "reg":
@@ -46,5 +55,7 @@ while True:
         wr_def("test2")
     elif cons == "sbc":
         get_subs_count("user2")
+    elif cons == "s":
+        get_user_posts("lux23")    
     else:
         print("No succh command")
