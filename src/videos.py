@@ -38,6 +38,7 @@ def write_def_postst(username:str) -> bool:
 
     for user in main:
         if user["username"] == username:
+            print("Here 1")
             return False
     main.append({
         "username":username,
@@ -45,19 +46,6 @@ def write_def_postst(username:str) -> bool:
     })
     with open("/Users/ivan/rest_api/data/posts.json","w") as file:
         json.dump(main,file,indent=2)
-
-    with open("/Users/ivan/rest_api/data/subs.json","r") as file:
-        subs = json.load(file)
-
-    if username in subs:
-        return False
-    else:
-        subs[username] = []
-        with open("/Users/ivan/rest_api/data/subs.json","w") as file:
-            json.dump(subs,file,indent=2)
-
-
-
 
     return True
 
