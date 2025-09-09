@@ -407,7 +407,7 @@ class GetPosts(BaseModel):
     username:str
 
 @app.post("/get/user/posts")
-def get_user_posts(request:GetPosts):
+async def get_user_posts(request:GetPosts):
     with open("/Users/ivan/rest_api/data/posts.json","r") as file:
         data = json.load(file)
     for user in data:
