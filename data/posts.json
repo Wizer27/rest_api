@@ -2,5 +2,34 @@
   {
     "username": "test",
     "posts": []
+  },
+  {
+    "username": "u",
+    "posts": [
+      {
+        "author": "u",
+        "title": "test_api",
+        "content": "api",
+        "type": "text",
+        "likes": [],
+        "dislikes": []
+      },
+      {
+        "author": "u",
+        "title": "hello word ",
+        "content": "video",
+        "type": "text",
+        "likes": [],
+        "dislikes": []
+      },
+      {
+        "author": "u",
+        "title": "hello word2",
+        "content": "test word",
+        "type": "text",
+        "likes": [],
+        "dislikes": []
+      }
+    ]
   }
 ]

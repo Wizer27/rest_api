@@ -10,5 +10,23 @@
     "titile": "test_api",
     "likes": [],
     "dislikes": []
+  },
+  {
+    "author": "u",
+    "titile": "test_api",
+    "likes": [],
+    "dislikes": []
+  },
+  {
+    "author": "u",
+    "titile": "hello word ",
+    "likes": [],
+    "dislikes": []
+  },
+  {
+    "author": "u",
+    "titile": "hello word2",
+    "likes": [],
+    "dislikes": []
   }
 ]
