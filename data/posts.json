@@ -2,40 +2,5 @@
   {
     "username": "test",
     "posts": []
-  },
-  {
-    "username": "test2",
-    "posts": []
-  },
-  {
-    "username": "nig",
-    "posts": []
-  },
-  {
-    "username": "n",
-    "posts": []
-  },
-  {
-    "username": "mh",
-    "posts": []
-  },
-  {
-    "username": "hm",
-    "posts": []
-  },
-  {
-    "username": "lux",
-    "posts": []
-  },
-  {
-    "username": "lux23",
-    "posts": [
-      {
-        "author": "lux23",
-        "title": "test_api",
-        "content": "test",
-        "type": "text"
-      }
-    ]
   }
 ]

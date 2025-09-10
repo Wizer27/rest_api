@@ -316,7 +316,9 @@ async def write_post_to_user(request:posts):
         "author":request.author,
         "title":request.title,
         "content":request.content,
-        "type":"text"
+        "type":"text",
+        "likes":[],
+        "dislikes":[]
     }
     if isinstance(request,VideoPost):
         base["video"] = request.video
@@ -419,32 +421,45 @@ async def get_user_posts(request:GetPosts):
 
 class SudoLike(BaseModel):
     username:str
-    title:str
     author:str
+    title:str
+    content:str
 @app.post("/like/post")
 async def like_sudo_post(request:SudoLike):
-    with open("/Users/ivan/rest_api/data/likes.json","r") as file:
+    with open("/Users/ivan/rest_api/data/posts.json","r") as file:
         data = json.load(file)
 
     user_ex = False
+    written = False
+
     for i in data:
-        if i["author"] == request.author:
-            user_ex = True
+        if i["username"] == request.author:
+            user_ex = True        
     if user_ex:
         for user in data:
-            if user["author"] == request.author and user["title"] == request.title and request.username not in user["likes"] and request.username not in user["dislikes"]:
-                user["likes"].append(request.username)
-            elif user["author"] == request.author and user["title"] == request.title and request.username not in user["likes"] and request.username in user["dislikes"]:
-                ind = user["dislikes"].index(request.username)
-                user["dislikes"].pop(ind)
-                user["likes"].append(request.username)
-            elif user["author"] == user.author and user["title"] == request.title and request.username in user["likes"] and request.username not in user["dislikes"]:
-                index = user["likes"].index(request.username)
-                user["likes"].pop(index)
-        with open("/Users/ivan/rest_api/data/likes.json","w") as file:
-            json.dump(data,file)
+            if user["username"] == request.author:
+                for post in user["posts"]:
+                    if post["title"] == request.title:
+                        if request.username not in post["likes"] and  request.username not in post["dislikes"]:
+                            post["likes"].append(request.username)
+                            written = True
+                        elif request.username not in post["likes"] and request.username in post["dislikes"]:
+                            index = post["dilikes"].index(request.username)
+                            post["dilikes"].pop(index)
+                            post["likes"].append(request.username)
+                            written = True
+                        elif request.username in post["likes"] and request.username not in post["dislikes"]:
+                            ind = post["likes"].index(request.username)
+                            post["likes"].pop(ind)
+                            written = True
+        if written:
+            with open("/Users/ivan/rest_api/data/posts.json","w") as file:
+                json.dump(data,file)                    
     else:
-        raise HTTPException(status_code=400,detail="User not found")
+        raise HTTPException(status_code=404,detail="User not found")
+
+
+
 
 @app.post("/dislike/post")
 async def dislike_post(request:SudoLike):
