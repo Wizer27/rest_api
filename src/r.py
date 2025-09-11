@@ -43,7 +43,7 @@ def get_user_posts(username:str):
     }
     resp = r.post(url,json = data)
     print(f"RESULT: {resp.text}")
-    return resp.text
+    return resp.json()
 
 while True:
     cons = input("> ")
