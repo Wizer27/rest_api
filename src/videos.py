@@ -589,3 +589,11 @@ async def get_subs_count(request:GetSubs):
         return len(data[request.username])
     raise HTTPException(status_code=404,detail="User not found")
 
+
+@app.post("/user/issubed")
+def is_subed(request:Nano):
+    with open("/Users/ivan/rest_api/data/subs.json","r") as file:
+        subs = json.load(file)
+    if request.creator in subs:
+        return request.username in subs[request.creator]
+    raise HTTPException(status_code = 400,detail="User not found") 
