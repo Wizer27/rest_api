@@ -496,6 +496,47 @@ async def dislike_post(request:SudoLike):
 
 
 
+@app.post("/get/post/react")
+async def get_post_react(request:posts):
+    with open("/Users/ivan/rest_api/data/posts.json","r") as file:
+        data = json.load(file)
+    base_search = {
+        "author":request.author,
+        "title":request.title,
+        "content":request.content,
+        "type":"text"
+    }
+    if isinstance(request,VideoPost):
+        base_search["video"] = request.video
+        base_search["type"] = "video"
+    elif isinstance(request,PhotoPost):
+        base_search["photo"] = request.photo
+        base_search["type"] = "photo"
+
+    user_ex = False
+    for i in data:
+        if data["username"] == request.username:
+            user_ex = True
+    if user_ex:
+        for user in data:
+            if user["username"] == request.username:
+                for post in user["posts"]:
+                    if post["type"] == base_search["type"] == "text":
+                        if post["title"] == base_search["title"] and post["content"] == base_search["content"]:
+                            return post["likes"],post["dilikes"]
+                    elif post["type"] == base_search["type"] == "photo":
+                        if post["title"] == base_search["title"] and post["content"] == base_search["content"] and post["photo"] == base_search["photo"]:
+                           return post["likes"],post["dilikes"]  
+                    elif post["type"] == base_search["type"] == "video":
+                        if post["title"] == base_search["title"] and post["content"] == base_search["content"] and post["video"] == base_search["video"]:
+                            return post["likes"],post["dilikes"]  
+       
+        raise HTTPException(status_code=404,detail="Post not found")                                        
+    else:
+        raise HTTPException(status_code=404,detail="User not found")
+
+
+
 class Nano(BaseModel):
     username:str
     creator:str
