@@ -515,21 +515,21 @@ async def get_post_react(request:posts):
 
     user_ex = False
     for i in data:
-        if data["username"] == request.username:
+        if i["username"] == request.author:
             user_ex = True
     if user_ex:
         for user in data:
-            if user["username"] == request.username:
+            if user["username"] == request.author:
                 for post in user["posts"]:
                     if post["type"] == base_search["type"] == "text":
                         if post["title"] == base_search["title"] and post["content"] == base_search["content"]:
-                            return post["likes"],post["dilikes"]
+                            return post["likes"],post["dislikes"]
                     elif post["type"] == base_search["type"] == "photo":
                         if post["title"] == base_search["title"] and post["content"] == base_search["content"] and post["photo"] == base_search["photo"]:
-                           return post["likes"],post["dilikes"]  
+                           return post["likes"],post["dislikes"]  
                     elif post["type"] == base_search["type"] == "video":
                         if post["title"] == base_search["title"] and post["content"] == base_search["content"] and post["video"] == base_search["video"]:
-                            return post["likes"],post["dilikes"]  
+                            return post["likes"],post["dislikes"]  
        
         raise HTTPException(status_code=404,detail="Post not found")                                        
     else:
