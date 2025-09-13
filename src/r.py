@@ -44,6 +44,16 @@ def get_user_posts(username:str):
     resp = r.post(url,json = data)
     print(f"RESULT: {resp.text}")
     return resp.json()
+def issubed(username:str,creator:str):
+    url = "http://0.0.0.0:8000/user/issubed"
+    data = {
+        "username":username,
+        "creator":creator
+    }
+    resp = r.post(url,json = data)
+    print(f"JSON : {resp.json()}")
+    print(f"TEXT : {resp.text}")
+
 
 while True:
     cons = input("> ")
@@ -56,6 +66,8 @@ while True:
     elif cons == "sbc":
         get_subs_count("user2")
     elif cons == "s":
-        get_user_posts("lux23")    
+        get_user_posts("lux23")  
+    elif cons == "?":
+        issubed("me","u")      
     else:
         print("No succh command")

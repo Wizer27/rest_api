@@ -417,6 +417,18 @@ async def get_user_posts(request:GetPosts):
             return user["posts"]
     raise HTTPException(status_code=404,detail="User not found")    
         
+class Search(BaseModel):
+    search:str
+@app.post("/search")
+async def search(request:Search):
+    with open("/Users/ivan/rest_api/data/posts.json","r") as file:
+        data = json.load(file)
+    search = []    
+    for user in data:
+        for post in user["posts"]:
+            if (post["title"].lower() in search.lower() or search.lower() in post["title"].lower()) or (post["content"].lower() in search.lower() or search.lower() in post["content"].lower()):
+                search.append(post)
+    return search            
 
 
 class SudoLike(BaseModel):
@@ -591,7 +603,7 @@ async def get_subs_count(request:GetSubs):
 
 
 @app.post("/user/issubed")
-def is_subed(request:Nano):
+async def is_subed(request:Nano):
     with open("/Users/ivan/rest_api/data/subs.json","r") as file:
         subs = json.load(file)
     if request.creator in subs:
