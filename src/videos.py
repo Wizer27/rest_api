@@ -1,13 +1,13 @@
 from fastapi import FastAPI,HTTPException, status
-from pydantic import BaseModel
+from pydantic import BaseModel,Field
 import json
 import threading
 import socket
-from typing import Union,Literal
+from typing import Union,Literal,List,Optional
 import random
 from pydantic.types import StrictStr
 from pydantic_core.core_schema import str_schema
-
+import uuid
 
 app = FastAPI()
 
@@ -294,6 +294,7 @@ async def write_default_posts(request:Write_Default_Posts):
     raise HTTPException(status_code=400,detail = "Something went wrong")
 
 class Post(BaseModel):
+    id:str = Field(default_factory=lambda: str(uuid.uuid4()))
     author:str
     title:str
     content:str
@@ -316,6 +317,7 @@ async def write_post_to_user(request:posts):
         "author":request.author,
         "title":request.title,
         "content":request.content,
+        "id":str(uuid.uuid4()),
         "type":"text",
         "likes":[],
         "dislikes":[]
@@ -423,12 +425,12 @@ class Search(BaseModel):
 async def search(request:Search):
     with open("/Users/ivan/rest_api/data/posts.json","r") as file:
         data = json.load(file)
-    search = []    
+    search_return = []    
     for user in data:
         for post in user["posts"]:
-            if (post["title"].lower() in search.lower() or search.lower() in post["title"].lower()) or (post["content"].lower() in search.lower() or search.lower() in post["content"].lower()):
-                search.append(post)
-    return search            
+            if (post["title"].lower() in request.search.lower() or request.search.lower() in post["title"].lower()) or (post["content"].lower() in request.search.lower() or request.search.lower() in post["content"].lower()):
+                search_return.append(post)
+    return search_return            
 
 
 class SudoLike(BaseModel):
@@ -514,7 +516,7 @@ async def get_random_post():
 
     random_posts = []
     for user in data:
-        if len(user["posts"] != 0):
+        if len(user["posts"]) != 0:
             random_posts.append(random.choice(user["posts"]))
     return random_posts    
             
@@ -628,7 +630,7 @@ async def unsub(request:Nano):
         if request.username in data[request.creator]:
 
             index = data[request.creator].index(request.username)
-            data[request.username].pop(index)
+            data[request.creator].pop(index)
 
             with open("/Users/ivan/rest_api/data/subs.json","w")  as file:
                 json.dump(data,file)  
