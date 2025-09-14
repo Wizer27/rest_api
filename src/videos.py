@@ -4,7 +4,7 @@ import json
 import threading
 import socket
 from typing import Union,Literal
-
+import random
 from pydantic.types import StrictStr
 from pydantic_core.core_schema import str_schema
 
@@ -507,7 +507,17 @@ async def dislike_post(request:SudoLike):
         raise HTTPException(status_code=404,detail="User not found")
 
 
+@app.get("/random/post")
+async def get_random_post():
+    with open("/Users/ivan/rest_api/data/posts.json","r") as file:
+        data = json.load(file)
 
+    random_posts = []
+    for user in data:
+        if len(user["posts"] != 0):
+            random_posts.append(random.choice(user["posts"]))
+    return random_posts    
+            
 @app.post("/get/post/react")
 async def get_post_react(request:posts):
     with open("/Users/ivan/rest_api/data/posts.json","r") as file:
