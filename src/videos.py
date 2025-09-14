@@ -609,3 +609,18 @@ async def is_subed(request:Nano):
     if request.creator in subs:
         return request.username in subs[request.creator]
     raise HTTPException(status_code = 400,detail="User not found") 
+
+@app.post("/user/unsub")
+async def unsub(request:Nano):
+    with open("/Users/ivan/rest_api/data/subs.json","r") as file:
+        data = json.load(file)
+    if request.creator in data:
+        if request.username in data[request.creator]:
+
+            index = data[request.creator].index(request.username)
+            data[request.username].pop(index)
+
+            with open("/Users/ivan/rest_api/data/subs.json","w")  as file:
+                json.dump(data,file)  
+        else:
+            raise HTTPException(status_code=404,detail="User not found")        
