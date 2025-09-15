@@ -16,7 +16,7 @@ def hash_username(username:str):
     byt = username.encode("utf-8")
     hashed = hashlib.sha256(byt).hexdigest()
     return hashed
-
+#id:str = Field(default_factory=lambda: str(uuid.uuid4()))
 
 class UserReg(BaseModel):
     username:str

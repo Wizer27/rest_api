@@ -294,7 +294,7 @@ async def write_default_posts(request:Write_Default_Posts):
     raise HTTPException(status_code=400,detail = "Something went wrong")
 
 class Post(BaseModel):
-    id:str = Field(default_factory=lambda: str(uuid.uuid4()))
+    id:str
     author:str
     title:str
     content:str
