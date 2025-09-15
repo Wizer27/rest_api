@@ -293,8 +293,10 @@ async def write_default_posts(request:Write_Default_Posts):
         return True
     raise HTTPException(status_code=400,detail = "Something went wrong")
 
+
+
 class Post(BaseModel):
-    id:str
+    id:str = Field(default_factory=lambda: str(uuid.uuid4()))
     author:str
     title:str
     content:str
@@ -354,53 +356,30 @@ async def write_post_to_user(request:posts):
     else:
         raise HTTPException(status_code=400,detail="User not found")
 
+
+class Delete_Post(BaseModel):
+    username:str
+    id:str
 @app.post("/delete/post")
-async def delete_post(request:posts):
+async def delete_post(request:Delete_Post):
     with open("/Users/ivan/rest_api/data/posts.json","r") as file:
         data = json.load(file)
 
-    base_search = {
-        "author":request.author,
-        "title":request.title,
-        "content":request.content,
-        "type":"text",
-        "id":request.id
-    }
-    if isinstance(request,VideoPost):
-        base_search["video"] = request.video
-        base_search["type"] = "video"
-    elif isinstance(request,PhotoPost):
-        base_search["photo"] = request.photo
-        base_search["type"] = "photo"
-
+   
     user_ex = False
     post_deleted = False
     for i in data:
-        if i["username"] == request.author:
+        if i["username"] == request.username:
             user_ex = True
     if user_ex:
-        try:
-            main_type = base_search["type"]
-            for user in data:
+        for user in data:
+            if user["username"] == request.username:
                 for post in user["posts"]:
                     if post["id"] == request.id:
-                        if main_type == "text" and base_search["author"] == post["author"] and base_search["title"] == post["title"] and base_search["content"] == post["content"]:
-                            inex = user["posts"].index(post)
-                            user["posts"].pop(inex)
-                            post_deleted = True
-                            break
-                        elif main_type == "video" and base_search["author"] == post["author"] and base_search["title"] == post["title"] and base_search["content"] == post["content"] and base_search["video"] == post["video"]:
-                            inex = user["posts"].index(post)
-                            user["posts"].pop(inex)
-                            post_deleted = True
-                            break
-                        elif main_type == "photo" and base_search["author"] == post["author"] and base_search["title"] == post["title"] and base_search["content"] == post["content"] and base_search["photo"] == post["photo"]:
-                            inex = user["posts"].index(post)
-                            user["posts"].pop(inex)
-                            post_deleted = True
-                            break
-        except Exception as e:
-            raise HTTPException(status_code=404,detail= f"Error : {e}")
+                        index = user["posts"].index(post)
+                        user["posts"].pop(index)
+                        post_deleted = True 
+    
     else:
         raise HTTPException(status_code=400,detail="User not found")
     if post_deleted:
