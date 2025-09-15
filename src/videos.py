@@ -417,8 +417,6 @@ async def search(request:Search):
 class SudoLike(BaseModel):
     username:str
     author:str
-    title:str
-    content:str
     id:str
 @app.post("/like/post")
 async def like_sudo_post(request:SudoLike):
@@ -433,15 +431,15 @@ async def like_sudo_post(request:SudoLike):
             user_ex = True        
     if user_ex:
         for user in data:
-            if user["username"] == request.author and post["id"] == request.id:
+            if user["username"] == request.author:
                 for post in user["posts"]:
-                    if post["title"] == request.title:
+                    if post["id"] == request.id:
                         if request.username not in post["likes"] and  request.username not in post["dislikes"]:
                             post["likes"].append(request.username)
                             written = True
                         elif request.username not in post["likes"] and request.username in post["dislikes"]:
-                            index = post["dilikes"].index(request.username)
-                            post["dilikes"].pop(index)
+                            index = post["dislikes"].index(request.username)
+                            post["dislikes"].pop(index)
                             post["likes"].append(request.username)
                             written = True
                         elif request.username in post["likes"] and request.username not in post["dislikes"]:
@@ -469,22 +467,22 @@ async def dislike_post(request:SudoLike):
             user_ex = True        
     if user_ex:
         for user in data:
-            if user["username"] == request.author and post["id"] == request.id:
+            if user["username"] == request.author:
                 for post in user["posts"]:
-                    if post["title"] == request.title:
+                    if post["id"] == request.id:
                         if request.username not in post["likes"] and  request.username not in post["dislikes"]:
-                            post["dilikes"].append(request.username)
+                            post["dislikes"].append(request.username)
                             written = True
                         elif request.username not in post["likes"] and request.username in post["dislikes"]:
-                            index = post["dilikes"].index(request.username)
-                            post["dilikes"].pop(index)
+                            index = post["dislikes"].index(request.username)
+                            post["dislikes"].pop(index)
                             written = True
                         elif request.username in post["likes"] and request.username not in post["dislikes"]:
                             ind = post["likes"].index(request.username)
                             post["likes"].pop(ind)
-                            post["dilikes"].append(request.username)
+                            post["dislikes"].append(request.username)
                             written = True
-        if written:
+    if written:
             with open("/Users/ivan/rest_api/data/posts.json","w") as file:
                 json.dump(data,file)                    
     else:
