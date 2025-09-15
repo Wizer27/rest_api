@@ -363,7 +363,8 @@ async def delete_post(request:posts):
         "author":request.author,
         "title":request.title,
         "content":request.content,
-        "type":"text"
+        "type":"text",
+        "id":request.id
     }
     if isinstance(request,VideoPost):
         base_search["video"] = request.video
@@ -382,21 +383,22 @@ async def delete_post(request:posts):
             main_type = base_search["type"]
             for user in data:
                 for post in user["posts"]:
-                    if main_type == "text" and base_search["author"] == post["author"] and base_search["title"] == post["title"] and base_search["content"] == post["content"]:
-                        inex = user["posts"].index(post)
-                        user["posts"].pop(inex)
-                        post_deleted = True
-                        break
-                    elif main_type == "video" and base_search["author"] == post["author"] and base_search["title"] == post["title"] and base_search["content"] == post["content"] and base_search["video"] == post["video"]:
-                        inex = user["posts"].index(post)
-                        user["posts"].pop(inex)
-                        post_deleted = True
-                        break
-                    elif main_type == "photo" and base_search["author"] == post["author"] and base_search["title"] == post["title"] and base_search["content"] == post["content"] and base_search["photo"] == post["photo"]:
-                        inex = user["posts"].index(post)
-                        user["posts"].pop(inex)
-                        post_deleted = True
-                        break
+                    if post["id"] == request.id:
+                        if main_type == "text" and base_search["author"] == post["author"] and base_search["title"] == post["title"] and base_search["content"] == post["content"]:
+                            inex = user["posts"].index(post)
+                            user["posts"].pop(inex)
+                            post_deleted = True
+                            break
+                        elif main_type == "video" and base_search["author"] == post["author"] and base_search["title"] == post["title"] and base_search["content"] == post["content"] and base_search["video"] == post["video"]:
+                            inex = user["posts"].index(post)
+                            user["posts"].pop(inex)
+                            post_deleted = True
+                            break
+                        elif main_type == "photo" and base_search["author"] == post["author"] and base_search["title"] == post["title"] and base_search["content"] == post["content"] and base_search["photo"] == post["photo"]:
+                            inex = user["posts"].index(post)
+                            user["posts"].pop(inex)
+                            post_deleted = True
+                            break
         except Exception as e:
             raise HTTPException(status_code=404,detail= f"Error : {e}")
     else:
@@ -438,6 +440,7 @@ class SudoLike(BaseModel):
     author:str
     title:str
     content:str
+    id:str
 @app.post("/like/post")
 async def like_sudo_post(request:SudoLike):
     with open("/Users/ivan/rest_api/data/posts.json","r") as file:
@@ -451,7 +454,7 @@ async def like_sudo_post(request:SudoLike):
             user_ex = True        
     if user_ex:
         for user in data:
-            if user["username"] == request.author:
+            if user["username"] == request.author and post["id"] == request.id:
                 for post in user["posts"]:
                     if post["title"] == request.title:
                         if request.username not in post["likes"] and  request.username not in post["dislikes"]:
@@ -487,7 +490,7 @@ async def dislike_post(request:SudoLike):
             user_ex = True        
     if user_ex:
         for user in data:
-            if user["username"] == request.author:
+            if user["username"] == request.author and post["id"] == request.id:
                 for post in user["posts"]:
                     if post["title"] == request.title:
                         if request.username not in post["likes"] and  request.username not in post["dislikes"]:
