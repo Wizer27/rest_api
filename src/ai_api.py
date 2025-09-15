@@ -39,5 +39,5 @@ async def requester_(request:UserReg):
     with open("/Users/ivan/rest_api/data/users.json","r") as file:
         json.dump(data,file,indent=2)    
 
-        
+      
     
