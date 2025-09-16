@@ -234,13 +234,14 @@ class ShowLiked(BaseModel):
     username:str
 @app.post("/get/liked")
 async def get_liked(request:ShowLiked):
-    with open("/Users/ivan/rest_api/data/liked_posts.json","r") as file:
+    with open("/Users/ivan/rest_api/data/posts.json","r") as file:
         data = json.load(file)
+    liked = []    
     for user in data:
-        if user["username"] == request.username:
-            return user["posts"]
-
-    raise HTTPException(status_code=400,detail="User not found")
+        for post in user["posts"]:
+            if request.username in post["likes"]:
+                liked.append(post)
+    return liked           
 
 
 
