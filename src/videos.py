@@ -212,7 +212,7 @@ class DeleteRequest(BaseModel):
     post:str
 
 @app.post("/liked/delete")
-def delte_post_from_liked(request:DeleteRequest):
+async def delte_post_from_liked(request:DeleteRequest):
     with open("/Users/ivan/rest_api/data/liked_posts.json","r") as file:
         data = json.load(file)
     global ok
