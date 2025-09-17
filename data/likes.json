@@ -118,5 +118,11 @@
     "titile": "First POst",
     "likes": [],
     "dislikes": []
+  },
+  {
+    "author": "ui",
+    "titile": "test ui post",
+    "likes": [],
+    "dislikes": []
   }
 ]
